@@ -1,3 +1,9 @@
+/*
+ * @Author: 卢勇其
+ * @Date: 2020-07-07 11:55:16
+ * @LastEditors: your name
+ * @LastEditTime: 2020-07-09 11:41:23
+ */ 
 'use strict'
 const path = require('path')
 const utils = require('./utils')
@@ -51,6 +57,7 @@ module.exports = {
         loader: 'babel-loader',
         include: [resolve('src'), resolve('test'), resolve('node_modules/webpack-dev-server/client')]
       },
+     
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
