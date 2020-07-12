@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: your name
- * @LastEditTime: 2020-07-09 11:47:01
+ * @LastEditTime: 2020-07-10 10:44:04
 --> 
 <template>
   <div id="app">
@@ -20,7 +20,8 @@
   }
 </script>
 
-<style >
+<style lang="scss">
+  @import 'element-ui/lib/theme-chalk/index.css';
   #app {
     font-family: 'Avenir', Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;

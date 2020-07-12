@@ -2,29 +2,33 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:52:31
  * @LastEditors: your name
- * @LastEditTime: 2020-07-09 10:00:07
+ * @LastEditTime: 2020-07-10 14:55:14
  */ 
 
 const user = {
   state: {
-    name:'',
+    username:'',
     avatar:  '',
+    roles: ['admin']
   },
   getters: {
-    name(state){
-       return state.name
+    username(state){
+       return state.username
     },
     avatar(state){
       return state.avatar
    },
   },
   mutations: {
-    SET_NAME: (state, name) => {
-      state.name = name
+    SET_NAME: (state, username) => {
+      state.username = username
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar
     },
+    SET_ROLES: (state, roles) => {
+      state.roles = roles
+    }
   },
 
   actions: {
@@ -41,7 +45,33 @@ const user = {
         // })
       })
     },
-    
+    // 获取用户信息
+    GetInfo({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        const response = { 
+          username:'admin',
+          avatar:'头像',
+          roles:['admin']
+        }
+        commit('SET_ROLES', response.roles)
+        commit('SET_NAME', response.username)
+        commit('SET_AVATAR', response.avatar)
+        resolve(response)
+        // getInfo().then(response => {
+        //   const data = response.data
+        //   if (data.roles && data.roles.length > 0) {    // 验证返回的roles是否是一个非空数组
+        //     commit('SET_ROLES', data.roles)
+        //   } else {
+        //     reject('getInfo: roles must be a non-null array !')
+        //   }
+        //   commit('SET_NAME', data.username)
+        //   commit('SET_AVATAR', data.icon)
+        //   resolve(response)
+        // }).catch(error => {
+        //   reject(error)
+        // })
+      })
+    },
   }
 }
 

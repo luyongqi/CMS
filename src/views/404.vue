@@ -1,3 +1,9 @@
+<!--
+ * @Author: 卢勇其
+ * @Date: 2020-07-09 09:49:45
+ * @LastEditors: your name
+ * @LastEditTime: 2020-07-12 15:09:07
+--> 
 <template>
   <div>
     <div class="app-container">
@@ -18,7 +24,7 @@
 
 <script>
   import img_404 from '@/assets/images/gif_404.gif';
-
+  import { Col, Button } from 'element-ui';
   export default {
     name: 'wrongPage',
     data() {

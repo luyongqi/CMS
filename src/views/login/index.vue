@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:43:58
  * @LastEditors: your name
- * @LastEditTime: 2020-07-09 10:37:18
+ * @LastEditTime: 2020-07-10 10:50:52
 --> 
 <template>
   <div>
@@ -11,7 +11,7 @@
 
     <!-- 登录与注册组件 -->
     <transition name="fade" enter-active-class="animated zoomIn" leave-active-class="animated zoomOut">
-        <component :is="loginOrRegisterFlag?'loginComponent':'register'" :showFlag.sync="loginOrRegisterFlag"></component>
+        <component :is="loginOrRegisterFlag?'Login':'Register'" :showFlag.sync="loginOrRegisterFlag"></component>
     </transition>
 
   </div>
@@ -20,8 +20,8 @@
 <script>
 
   import login_center_bg from '@/assets/images/login_center_bg.png'; //图片背景
-  import register from './components/register.vue'; //注册组件
-  import loginComponent from './components/login.vue'; //登录组件
+  import Register from './components/Register.vue'; //注册组件
+  import Login from './components/Login.vue'; //登录组件
 
   export default {
     name: 'login',
@@ -37,8 +37,8 @@
       }
     },
     components:{
-      register,
-      loginComponent,
+      Register,
+      Login,
     },
     created() {
 

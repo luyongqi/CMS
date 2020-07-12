@@ -9,7 +9,7 @@
         <div class="nav-top-list">
           <!-- 导航组件 -->
           <el-menu
-            :default-active="navBarList[0].menuId"
+           :default-active="$route.matched[0].name"
             class="el-menu-demo"
             mode="horizontal"
             @select="selectFn"
@@ -19,10 +19,10 @@
           >
             <el-menu-item
               class="el-element-item"
-              v-for="(item,index) in navTree"
+              v-for="(item,index) in menuList"
               :key="index"
-              :index="item.menuId"
-            >{{item.menuName}}</el-menu-item>
+              :index="item.name"
+            >{{item.meta.title}}</el-menu-item>
           </el-menu>
 
         </div>
@@ -60,14 +60,8 @@
 </template>
 
 <script>
-/***
- *  根据菜单的menuid 高亮顶部导航
- * 
-  **/
-import { mapMutations, mapGetters,mapState } from "vuex";
-import { logoutNew } from "@/apiNew/user.js";
-import { removeToken } from '@/utils/auth'
-import { getIFramePath } from '@/utils/iframe'
+
+import { mapState, mapMutations } from "vuex";
 
 export default {
   data() {
@@ -77,65 +71,33 @@ export default {
   },
 
   computed: {
-    ...mapGetters(["avatar", "navTop"]),
     ...mapState({
-      navTree: state=>state.menu.navTree,
-      navBarList:state => state.menu.navBarList       //导航栏数组
-    }),
+      menuList: state => state.menu.menuList
+    })
   },
 
   //组件创建的时候获取路由的数组
   created() {
-    
+    console.log(this.$route)
   },
   
   methods: {
-    ...mapMutations([
-      "SET_SLIDER_TREE",
-    ]),
+    ...mapMutations(['SET_SIDE_LIST']),
 
-    // 根据父级id查找侧边栏点击导航 选择顶部导航时重定向到第一项
-    selectFn(menuId) {
-      //根据menuId筛选出侧边导航栏
-      let sliderTree = this.navTree.filter((item,index)=>{
-        return item.menuId == menuId  
+    selectFn(name){
+      //根据name 筛选出侧边栏导航菜单
+      let sideMenuList = this.menuList.filter((item,index)=>{
+        return item.name == name  
       })
-      this.SET_SLIDER_TREE(sliderTree[0]);      //保存当前选中项的侧边栏菜单;
-
-      var obj = this.getMenuSrc(sliderTree[0].children[0])
-
-      // 如果是嵌套页面，转换成iframe的path
-      let path = getIFramePath(obj.menuSrc)
-      if(!path) {
-        path = obj.menuSrc
-      }
-      // 通过菜单URL跳转至指定路由
-      this.$router.push("/" + path)
+      this.SET_SIDE_LIST(sideMenuList[0])  
     },
-    // 返回顶级菜单下第一级子菜单
-    getMenuSrc(obj){
-      let temp;
-      if(obj.children&&obj.children.length>0){
-        temp = obj.children[0]
-        this.getMenuSrc(temp)
-        return temp
-      }else{
-        return obj
-      }
-    },
-
     // 回到首页
     gotoHome() {
       this.$router.push({ path: "/home" });
     },
     // 退出登录
     logout() {
-      logoutNew().then(res => {
-        // location.reload(); //刷新页面
-        this.$store.commit('SET_ROLES', '');
-        removeToken()
-        this.$router.push({ path: "/login" });
-      });
+       this.$router.push({ path: "/login" });
     }
   }
 };
@@ -144,12 +106,10 @@ export default {
 <style lang="scss" scoped>
 .el-menu-demo {
   width: 100%;
-  height: 60px;
+
   background-color: transparent;
   border-bottom: none;
   .el-element-item {
-    height: 60px;
-    line-height: 60px;
     font-size: 15px;
     border-bottom: none;
   }
@@ -159,7 +119,6 @@ export default {
   position: fixed;
   left: 0;
   top: 0;
-  height: 60px;
   background: #304156;
   z-index: 3000;
   &:after {

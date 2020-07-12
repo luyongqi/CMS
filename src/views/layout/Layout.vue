@@ -1,10 +1,14 @@
+<!--
+ * @Author: 卢勇其
+ * @Date: 2020-07-10 09:54:12
+ * @LastEditors: your name
+ * @LastEditTime: 2020-07-12 17:51:37
+--> 
 <template>
   <div class="app-wrapper" :class="classObj">
     <el-container>
       <!-- 头部 -->
-      <el-header>
-        <NavTop></NavTop>
-      </el-header>
+      <NavTop></NavTop>
 
       <el-container>
         <!-- 侧边栏 -->
@@ -26,24 +30,21 @@
 import { Navbar, Sidebar, AppMain, NavTop } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
 import store from '@/store'
-import {mapState } from 'vuex'
-import { getNavBarList } from '@/utils/common'
+import {mapState, mapMutations } from 'vuex'
 
 export default {
   name: "layout",
   components: {
-    Navbar, //二级navbar 放页面当前位置的
-    Sidebar, //左侧导航
-    AppMain, //内容组件
-    NavTop //顶部的顶级导航
+    Navbar,             //二级navbar 放页面当前位置的
+    Sidebar,            //左侧导航
+    AppMain,            //内容组件
+    NavTop              //顶部的顶级导航
   },
   mixins: [ResizeMixin],
   computed: {
     ...mapState({
-      navTree: state => state.menu.navTree,
-      collapse: state => state.app.collapse,
-      menuList:state => state.menu.menuList,
-      withoutAnimation: state => state.app.withoutAnimation
+      withoutAnimation: state => state.app.withoutAnimation,
+      menuList: state => state.menu.menuList
     }),
     
     device() {
@@ -59,40 +60,37 @@ export default {
   },
   watch: {
     $route() {
-      this.getBreadcrumb()
+      this.setSideMenuList()
     },
   },
   created() {
-   this.getBreadcrumb()
+   this.setSideMenuList()
   },
   methods:{
-    // 设置当前路径页面navbar
-    getBreadcrumb(){     
-      let arr = getNavBarList(this.menuList,this.$route.meta.index);
-      this.$store.commit('SET_NAV_LIST',arr)
-      this.getSliderList(arr[0].menuId)
-    },
-     // 根据父级id查找侧边栏点击导航
-    getSliderList(menuId) {
-      //根据menuId筛选出侧边导航栏
-      let sliderTree = this.navTree.filter((item,index)=>{
-        return item.menuId == menuId  
+    ...mapMutations(['SET_SIDE_LIST']),
+    // 页面刷新时，根据顶部菜单路由的name设置侧边栏 
+    setSideMenuList(){     
+      let topName = this.$route.matched[0].name;   //当前顶部菜单的路由对应的name
+      //根据name 筛选出侧边栏导航菜单
+      let sideMenuList = this.menuList.filter((item,index)=>{
+        return item.name == topName  
       })
-      this.$store.commit('SET_SLIDER_TREE',sliderTree[0]);      //保存当前选中项的侧边栏菜单;
+      this.SET_SIDE_LIST(sideMenuList[0])  
     },
+    
   }
 };
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-@import "src/styles/mixin.scss";
-.app-wrapper {
-  @include clearfix;
-  position: relative;
-  height: 100%;
-  width: 100%;
-}
-.el-main{
-  padding-top: 0;
-}
+  @import "src/styles/mixin.scss";
+  .app-wrapper {
+    @include clearfix;
+    position: relative;
+    height: 100%;
+    width: 100%;
+  }
+  .el-main{
+    padding-top: 0;
+  }
 </style>
