@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:43:58
  * @LastEditors: your name
- * @LastEditTime: 2020-07-10 10:50:52
+ * @LastEditTime: 2020-07-13 14:23:39
 --> 
 <template>
   <div>
@@ -19,7 +19,7 @@
 
 <script>
 
-  import login_center_bg from '@/assets/images/login_center_bg.png'; //图片背景
+  import login_center_bg from '@/assets/images/login_center_bg.jpg'; //图片背景
   import Register from './components/Register.vue'; //注册组件
   import Login from './components/Login.vue'; //登录组件
 
@@ -54,12 +54,12 @@
 <style scoped lang="scss">
 
   .login-center-layout {
-    background: #409EFF;
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 100%;
-    margin-top: 200px;
+     position: fixed;
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit:cover;
+    z-index: -100; 
   }
 
 </style>

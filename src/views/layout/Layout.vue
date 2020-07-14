@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:12
  * @LastEditors: your name
- * @LastEditTime: 2020-07-12 17:51:37
+ * @LastEditTime: 2020-07-13 11:52:54
 --> 
 <template>
   <div class="app-wrapper" :class="classObj">
@@ -44,7 +44,8 @@ export default {
   computed: {
     ...mapState({
       withoutAnimation: state => state.app.withoutAnimation,
-      menuList: state => state.menu.menuList
+      menuList: state => state.menu.menuList,
+      collapse: state => state.app.collapse,
     }),
     
     device() {
@@ -82,13 +83,14 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style lang="scss" scoped>
   @import "src/styles/mixin.scss";
   .app-wrapper {
     @include clearfix;
     position: relative;
     height: 100%;
     width: 100%;
+    margin-top:60px;
   }
   .el-main{
     padding-top: 0;

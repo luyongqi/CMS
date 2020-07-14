@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:22
  * @LastEditors: your name
- * @LastEditTime: 2020-07-12 18:10:55
+ * @LastEditTime: 2020-07-13 17:17:39
 --> 
 <template>
   <el-menu class="navbar" mode="horizontal">
@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapGetters,mapState} from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 import Hamburger from './Hamburger'
 
 export default {
@@ -37,7 +37,9 @@ export default {
     Hamburger
   },
   computed: {
-    
+    ...mapState({
+      collapse: state => state.app.collapse
+    })
   },
   
   // 初始化数据
@@ -45,14 +47,20 @@ export default {
     this.getBreadcrumb()
   },
   methods: {
-   getBreadcrumb() {
+    ...mapMutations(['SET_COLLAPSE_STATUS']),
+    //获取当前菜单位置列表
+    getBreadcrumb() {
      let matched = this.$route.matched.filter(item => item.name)
       const first = matched[0]
       if (first && first.name !== 'home') {
         matched = [{ path: '/home', meta: { title: '首页' }}].concat(matched)
       }
       this.levelList = matched
-    }
+    },
+    // 切换侧边栏展开或收缩
+    toggleSideBar() {
+      this.SET_COLLAPSE_STATUS()
+    },
   }
 }
 </script>
@@ -84,5 +92,24 @@ export default {
       cursor: text;
     }
   }
+  /*fade*/
+.breadcrumb-enter-active,
+.breadcrumb-leave-active {
+  transition: all .5s;
+}
+
+.breadcrumb-enter,
+.breadcrumb-leave-active {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.breadcrumb-move {
+  transition: all .5s;
+}
+
+.breadcrumb-leave-active {
+  position: absolute;
+}
 </style>
 

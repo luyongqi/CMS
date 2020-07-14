@@ -90,6 +90,7 @@ export default {
         return item.name == name  
       })
       this.SET_SIDE_LIST(sideMenuList[0])  
+      this.$router.push({name})
     },
     // 回到首页
     gotoHome() {

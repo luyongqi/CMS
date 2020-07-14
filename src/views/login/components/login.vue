@@ -1,10 +1,6 @@
 <template>
   <div class="login">
     <el-card class="login-form-layout">
-        <div slot="header" class="title">
-            <span class="title-left">注册与登录</span>
-            <el-button class="title-right" @click="changeComponent">去注册</el-button>
-        </div>
         <el-form autoComplete="on"
           :model="loginForm"
           :rules="loginRules"
@@ -19,7 +15,7 @@
             type="text"
             v-model="loginForm.username"
             autoComplete="on"
-            placeholder="请输入用户名/手机号">
+            placeholder="请输入用户名称">
             <span slot="prefix">
               <svg-icon icon-class="user" class="color-main"></svg-icon>
             </span>
@@ -31,7 +27,7 @@
             @keyup.enter.native="handleLogin"
             v-model="loginForm.password"
             autoComplete="on"
-            placeholder="请输入密码">
+            placeholder="请输入登录密码">
               <span slot="prefix">
                 <svg-icon icon-class="password" class="color-main"></svg-icon>
               </span>
@@ -40,7 +36,7 @@
               </span>
           </el-input>
         </el-form-item>
-        <el-form-item style="margin-bottom: 60px;text-align: center">
+        <el-form-item style="margin-bottom: 20px;text-align: center">
           <el-button style="width: 45%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
             登录
           </el-button>
@@ -108,6 +104,7 @@
             }
         },
         handleLogin() {
+          this.$router.push('/')
             this.$refs.loginForm.validate(valid => {
               if (valid) {
                   
@@ -122,17 +119,14 @@
 
     .login{
         width: 100%;
-        position: absolute;
-        left: 0;right: 0;
-        top: 180px;
-        margin: 0 auto;
-        border-bottom: 100px solid transparent;
+        height:100vh;
+        display:flex;
+        align-items:center;
+        justify-content:center;
     }
    .login-form-layout {
-        width: 800px;
-        margin: 0 auto;
-        border-top: 10px solid #409EFF;
-    .title{
+      width: 500px; 
+      .title{
         overflow: hidden;
         position: relative;
         .title-left{

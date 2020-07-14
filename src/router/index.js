@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: your name
- * @LastEditTime: 2020-07-12 18:00:15
+ * @LastEditTime: 2020-07-14 09:11:14
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -24,7 +24,6 @@ export const constantRouterMap = [
     component: () => import('@/views/login'),
     hidden: true
   },
- 
   { 
     path: '/404', 
     component: () => import('@/views/404'),
@@ -39,17 +38,31 @@ export const asyncRouterMap = [
     name:'home',
     component: Layout,
     redirect: '/home',
-    meta: {title: '首页', icon:'home'},
+    meta: {title: '首页', icon:'iconshouye'},
     children: [
       {
-        path: '/home',
+        path: 'home',
         name: 'homepage',
         component: () => import('@/views/home/index'),
-        meta: {title: '我的工作台', icon:'home'},
+        meta: {title: '我的工作台', icon:'iconshouye'},
       },
     ]
   },
-  
+  {
+    path:'/sys',
+    name:'sys',
+    component: Layout,
+    redirect: '/sys/user',
+    meta: {title: '系统管理', icon:'iconshouye'},
+    children: [
+      {
+        path: 'user',
+        name: 'user',
+        component: () => import('@/views/sys/user/index'),
+        meta: {title: '用户管理', icon:'iconshouye'},
+      },
+    ]
+  },
   {
     path: '*', 
     redirect: '/404',
@@ -65,7 +78,6 @@ const router = new Router({
 router.beforeEach((to, from, next)=>{
   if( store.state.menu.menuList.length===0 ){
     let list = getMenuList() 
-
     store.dispatch('getMenuList',list)
   }
 
@@ -91,7 +103,5 @@ function getMenuList(){
   })
   return menu
 }
-
-//根据当前的路由name,获取
 
 export default router
