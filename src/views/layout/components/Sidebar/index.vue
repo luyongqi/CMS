@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:27
  * @LastEditors: your name
- * @LastEditTime: 2020-07-13 18:24:15
+ * @LastEditTime: 2020-07-15 09:26:20
 --> 
 <template>
   <scroll-bar>
@@ -14,15 +14,17 @@
       background-color="#304156"
       text-color="#bfcbd9"
       active-text-color="#409EFF"
-      :unique-opened="true"
     > 
       <!-- 导航菜单组件 动态组件 -->
-      <MenuTree v-for="(item,index) in sideMenuList.children" :menu="item" :key="index"></MenuTree>
+      <MenuTree v-for="(item) in sideMenuList.children" :menu="item" :key="item.name"></MenuTree>
     </el-menu>
   </scroll-bar>
 </template>
 
 <script>
+/**
+ * MenuTree组件的key值要为唯一的，否则点击顶部菜单时组件不会重新渲染
+ */
 import { mapGetters , mapState } from 'vuex'
 import MenuTree from './MenuTree'
 import ScrollBar from './ScrollBar'
@@ -31,7 +33,7 @@ export default {
   components: { MenuTree, ScrollBar },
   data(){
     return {
-      
+
     } 
   },
   computed: {
@@ -40,8 +42,13 @@ export default {
         collapse:state=>state.app.collapse
     }),
   },
+  watch:{
+    $route(){
+     
+    }
+  },
   created(){
-
+  
   },
   methods:{
    

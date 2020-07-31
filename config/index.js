@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: your name
- * @LastEditTime: 2020-07-07 14:59:49
+ * @LastEditTime: 2020-07-25 10:01:01
  */ 
 'use strict'
 // Template version: 1.3.1
@@ -16,7 +16,16 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    // 配置反向代理
+    proxyTable: { 
+      '/bmSrv':{
+        target: 'http://192.168.1.19:8280',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/bmSrv': '/bmSrv'
+        }
+      }, 
+    },
 
     // Various Dev Server settings
     host: 'localhost', // can be overwritten by process.env.HOST

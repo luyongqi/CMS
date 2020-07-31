@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:32
  * @LastEditors: your name
- * @LastEditTime: 2020-07-14 09:14:17
+ * @LastEditTime: 2020-07-14 10:30:48
 --> 
 <template>
   <el-submenu v-if="menu.children && menu.children.length > 0" :index="menu.name">

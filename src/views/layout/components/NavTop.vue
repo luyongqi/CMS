@@ -78,7 +78,7 @@ export default {
 
   //组件创建的时候获取路由的数组
   created() {
-    console.log(this.$route)
+    
   },
   
   methods: {
@@ -89,7 +89,7 @@ export default {
       let sideMenuList = this.menuList.filter((item,index)=>{
         return item.name == name  
       })
-      this.SET_SIDE_LIST(sideMenuList[0])  
+      // this.SET_SIDE_LIST(sideMenuList[0])  
       this.$router.push({name})
     },
     // 回到首页

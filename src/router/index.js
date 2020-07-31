@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: your name
- * @LastEditTime: 2020-07-14 09:11:14
+ * @LastEditTime: 2020-07-31 15:10:30
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -58,9 +58,52 @@ export const asyncRouterMap = [
       {
         path: 'user',
         name: 'user',
-        component: () => import('@/views/sys/user/index'),
-        meta: {title: '用户管理', icon:'iconshouye'},
+        component: () => import('@/views/sys/user'),
+        meta: {title: '用户管理', icon:'iconyonghuguanli'},
       },
+      {
+        path: 'division',
+        name: 'division',
+        component: () => import('@/views/sys/division'),
+        meta: {title: '部门管理', icon:'iconbumenguanli'},
+      },
+      {
+        path: 'roles',
+        name: 'roles',
+        component: () => import('@/views/sys/roles'),
+        meta: {title: '角色管理', icon:'iconjiaoseguanli'},
+      },
+      {
+        path: 'business',
+        name: 'business',
+        component: () => import('@/views/sys/business'),
+        meta: {title: '单位管理', icon:'icontubiao_qiyeguanli-copy'},
+      },
+      {
+        path: 'facility',
+        name: 'facility',
+        component: () => import('@/views/sys/facility'),
+        meta: {title: '设备管理', icon:'iconshebeiguanli'},
+      },
+      {
+        path: 'project',
+        name: 'project',
+        component: () => import('@/views/sys/project'),
+        meta: {title: '项目管理', icon:'iconziyuan'},
+      },
+      {
+        path: 'steps',
+        name: 'steps',
+        component: () => import('@/views/sys/steps'),
+        meta: {title: '步骤管理', icon:'iconzhijianbuzhou'},
+      },
+      {
+        path: 'order',
+        name: 'order',
+        component: () => import('@/views/sys/order'),
+        meta: {title: '工单管理', icon:'icongongdanguanli'},
+      },
+      
     ]
   },
   {
@@ -80,7 +123,6 @@ router.beforeEach((to, from, next)=>{
     let list = getMenuList() 
     store.dispatch('getMenuList',list)
   }
-
   next()
 })
 

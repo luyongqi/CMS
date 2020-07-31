@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:12
  * @LastEditors: your name
- * @LastEditTime: 2020-07-13 11:52:54
+ * @LastEditTime: 2020-07-31 15:20:38
 --> 
 <template>
   <div class="app-wrapper" :class="classObj">
@@ -18,7 +18,7 @@
         <el-main>
             <div class="main-container">
               <navbar></navbar>
-              <app-main></app-main>
+              <app-main class="app-container"></app-main>
             </div>
         </el-main>
       </el-container>
@@ -91,6 +91,9 @@ export default {
     height: 100%;
     width: 100%;
     margin-top:60px;
+  }
+  .app-container {
+    padding: 20px;
   }
   .el-main{
     padding-top: 0;

@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:43:58
  * @LastEditors: your name
- * @LastEditTime: 2020-07-13 14:23:39
+ * @LastEditTime: 2020-07-25 09:08:08
 --> 
 <template>
   <div>
@@ -24,7 +24,6 @@
   import Login from './components/Login.vue'; //登录组件
 
   export default {
-    name: 'login',
     data() {
         return{
           login_center_bg, //背景图片
