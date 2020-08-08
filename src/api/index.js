@@ -1,18 +1,18 @@
 /*
  * @Author: 卢勇其
  * @Date: 2020-05-25 14:41:05
- * @LastEditors: your name
- * @LastEditTime: 2020-07-07 16:09:31
+ * @LastEditors: luyongqi
+ * @LastEditTime: 2020-08-06 17:40:18
  */ 
 import axios from 'axios';
+import { Message } from 'element-ui'
 
 // 全局设置
 const instance = axios.create({
-    baseURL: 'http://localhost:8080/',
     timeout: 15000,    // 请求超时时间
     withCredentials: true,
     headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+        'Content-Type': 'application/json'
     }
 });
 
@@ -35,7 +35,17 @@ instance.interceptors.request.use(
 // respone拦截器
 instance.interceptors.response.use(
   response => {
-    return response;
+    Message.closeAll(); //解决多次弹窗问题
+    if(response.data.retCode==="000000"){  
+       return response.data;  
+    }else{
+      Message({
+        message: response.data.errInfo,
+        type: 'error',
+        duration: 1.5 * 1000,
+        offset:150
+      })
+    } 
   },
   error => {
     let { response } = error;
@@ -44,6 +54,13 @@ instance.interceptors.response.use(
       window.sessionStorage.removeItem('userInfo');
       window.location.href = "/login";
       return Promise.reject(error.response);
+    }else{
+      Message({
+        message: '系统内部错误！',
+        type: 'error',
+        duration: 1.5 * 1000,
+        offset:150
+      })
     }
   }
 )

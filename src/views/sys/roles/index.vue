@@ -1,8 +1,8 @@
 <!--
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
- * @LastEditors: your name
- * @LastEditTime: 2020-07-31 16:58:45
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2020-08-04 15:03:00
 --> 
 <template>
     <div class="role-management">
@@ -47,18 +47,18 @@
         <el-dialog
         title="新增角色"
         :visible.sync="dialogVisible" width="30%">
-        <el-form :model="dictionaryKey" ref="reasonForm" label-width="150px">
-            <el-form-item label="角色名称：">
-            <el-input v-model="dictionaryKey.dictKeyName" class="input-width"></el-input>
-            </el-form-item>
-            <el-form-item label="角色标志">
-            <el-input v-model="dictionaryKey.dictKeyDesc" class="input-width"></el-input>
-            </el-form-item>
-        </el-form>
-        <span slot="footer" class="dialog-footer">
-            <el-button @click="dialogVisible = false">取 消</el-button>
-            <el-button type="primary" @click="handleConfirm">确 定</el-button>
-        </span>
+            <el-form :model="dictionaryKey" ref="reasonForm" label-width="150px">
+                <el-form-item label="角色名称：">
+                <el-input v-model="dictionaryKey.dictKeyName" class="input-width"></el-input>
+                </el-form-item>
+                <el-form-item label="角色标志">
+                <el-input v-model="dictionaryKey.dictKeyDesc" class="input-width"></el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="handleConfirm">确 定</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>

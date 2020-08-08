@@ -1,8 +1,8 @@
 /*
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
- * @LastEditors: your name
- * @LastEditTime: 2020-07-25 10:01:01
+ * @LastEditors: luyongqi
+ * @LastEditTime: 2020-08-06 11:42:13
  */ 
 'use strict'
 // Template version: 1.3.1
@@ -18,11 +18,11 @@ module.exports = {
     assetsPublicPath: '/',
     // 配置反向代理
     proxyTable: { 
-      '/bmSrv':{
-        target: 'http://192.168.1.19:8280',
+      '/v1':{
+        target: 'http://192.168.1.19:8380/',
         changeOrigin: true,
         pathRewrite: {
-          '^/bmSrv': '/bmSrv'
+          '^/v1': '/v1'
         }
       }, 
     },
