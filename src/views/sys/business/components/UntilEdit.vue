@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-08 18:04:39
+ * @LastEditTime: 2020-08-13 10:52:16
 -->
 <template>
   <el-dialog
@@ -21,7 +21,7 @@
             ></el-input>
         </el-form-item>
 
-        <el-form-item prop="parentOrgId" label="上级菜单" >
+        <el-form-item prop="parentOrgId" label="上级单位" >
             <el-cascader v-model="selectId" :options="selectCompanyList" :props="{checkStrictly: true,value:'orgId',label:'orgName'}" filterable clearable @change="changeFn">
                 <template slot-scope="{ data }">
                     <span>{{ data.orgName }}</span>
@@ -61,7 +61,6 @@
     components:{ Picker },
     data() {
       return {
-        selectMenuList: [],      //选择上级菜单
         selectId:'0',
         form: {
             parentOrgId:'0',    //上级单位id  

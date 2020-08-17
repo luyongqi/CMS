@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-08 15:52:12
+ * @LastEditTime: 2020-08-15 11:58:18
 --> 
 <template>
     <div class="user-management">
@@ -17,11 +17,11 @@
                 <!-- 表格 -->
                 <el-table border  fit :data="deptList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
                     <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
-                    <el-table-column fixed label="设备id" width="200" prop="deviceId" align="center"></el-table-column>
+                    <el-table-column fixed label="设备编号" prop="deviceId" align="center"></el-table-column>
                     <el-table-column fixed label="设备名称"  prop="deviceName" align="center"></el-table-column>
                     <el-table-column fixed label="所属部门"  prop="deptName" align="center"></el-table-column>
                     <el-table-column fixed label="设备型号"  prop="deviceModel"  align="center"></el-table-column>
-                    <el-table-column fixed label="更新者"  prop="updatedUser"  align="center"></el-table-column>
+                    <el-table-column fixed label="操作人"  prop="updatedUser"  align="center"></el-table-column>
                     <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column>
                     <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column>
                     <el-table-column fixed="left" label="状态"  align="center">
@@ -29,15 +29,12 @@
                             <el-tag>{{scope.row.status=='0'?'停用':'正常'}}</el-tag>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed="left" label="设置" width="200" align="center">
+                   
+                    <el-table-column fixed="left" label="操作" width="250" align="center">
                         <template slot-scope="scope">
-                            <el-button  type="text" @click.stop="navTo(scope.row)">
-                                项目
+                            <el-button  size="mini" @click.stop="navTo(scope.row)">
+                                添加项目
                             </el-button> 
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="left" label="操作" width="200" align="center">
-                        <template slot-scope="scope">
                             <el-button size="mini" @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 

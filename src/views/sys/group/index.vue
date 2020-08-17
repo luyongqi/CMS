@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-14 16:50:35
+ * @LastEditTime: 2020-08-15 12:04:13
 --> 
 <template>
     <div class="user-management">
@@ -10,37 +10,25 @@
         <el-card class="operate-container" shadow="never" >
             <div slot="header">
                 <i class="iconfont iconjiaoseguanli2"></i>
-                <span>步骤管理</span>
+                <span>分组管理</span>
                 <el-button size="mini" @click="handleEdit" class="btn-add">新增</el-button>
             </div>
             <div>
                 <!-- 表格 -->
-                <el-table border  fit :data="stepList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
+                <el-table border  fit :data="groupList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
                     <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
-                    <el-table-column fixed label="步骤id"  prop="stepId" align="center"></el-table-column>
-                    <el-table-column fixed label="步骤名称"  prop="stepName" align="center"></el-table-column>
-                    <el-table-column fixed label="所属设备"  prop="deviceName" align="center"></el-table-column>
-                    <el-table-column fixed label="所属项目"  prop="itemName" align="center"></el-table-column>
-                    <el-table-column fixed label="步骤内容"  prop="stepContent" align="center"></el-table-column>
-                    <el-table-column fixed label="输入框类型"   align="center">
-                        <template slot-scope="scope">
-                            <div>
-                                {{ scope.row.stepInputType | formStepType }}
-                            </div>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed label="操作人"  prop="updatedUser"  align="center"></el-table-column>
-                    <el-table-column fixed label="步骤内容"  prop="stepContent"  align="center"></el-table-column>
-                    <!-- <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column> -->
+                    <el-table-column fixed label="分组编号" width="200" prop="groupId" align="center"></el-table-column>
+                    <el-table-column fixed label="分组名称"  prop="groupName" align="center"></el-table-column>
+                    <el-table-column fixed label="操作人"  prop="updatedUser" align="center"></el-table-column>
+                    <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column>
                     <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column>
-                    <el-table-column fixed="left" label="状态"  align="center">
+                    
+                    <el-table-column fixed="left" label="操作" width="250" align="center">
                         <template slot-scope="scope">
-                            <el-tag>{{scope.row.status=='0'?'停用':'正常'}}</el-tag>
-                        </template>
-                    </el-table-column>
-                    <el-table-column fixed="left" label="操作" width="160" align="center">
-                        <template slot-scope="scope">
-                            <el-button  size="mini" @click.stop="handleEdit(scope.row)">
+                            <el-button  size="mini" @click.stop="navTo(scope.row)">
+                                添加人员
+                            </el-button> 
+                            <el-button size="mini" @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 
                             <el-button size="mini" disabled @click.stop="handleDel(scope.row)">
@@ -71,8 +59,8 @@
 </template>
 
 <script>
-import { getStepList, getStepInfo, delStep } from '@/api/manage';
-import Edit from "./components/StaEdit";
+import { getGroupList, getGroupInfo, delGroup } from '@/api/manage';
+import Edit from "./components/GroEdit";
 import { formatDate } from '@/utils/date'
 export default {
     components:{ Edit },
@@ -82,7 +70,7 @@ export default {
             pageNo:0,
             currentPage:1,
             totalNum:0,
-            stepList:[],         //部门列表
+            groupList:[],          //分组列表
             isLoading:true
         }
     },
@@ -92,17 +80,14 @@ export default {
     created(){
        this.fetchData();
     },
-    // 过滤器
-    filters: {
-        formStepType(type) {
-            return type=='1'?'文本框':type=='2'?'数值框':type=='5'?'单选框':type=='7'?'多选框':type=='9'?'文件/图片':'';
-        }
-    },
     methods:{
-    
+        // 跳转至人员添加
+        navTo(row){
+            this.$router.push({path:'/sys/staff',query:{row}})
+        },
         // 新增、编辑
         handleEdit(row) {
-            if (row.id) {       //有row时为编辑状态
+            if (row.id) {
                 this.$refs["edit"].showEdit(row);    
             } else {
                 this.$refs["edit"].showEdit();
@@ -115,7 +100,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then( () => {
-                delStep({
+                delGroup({
                     ids:[ row.id+'' ],               //单位id
                     userId:'admin'                   //用户id
                 }).then( (res) =>　{
@@ -129,11 +114,7 @@ export default {
                 })  
             })  
         },
-      
-        // 跳转至详情页
-        navToDetail(row){
-            this.$router.push({ path:'/sys/steps/stepDetail', query:{row} })
-        },
+
         //当前页码发生变化时
         handleCurrentChange(val){
             this.pageNo = val-1;
@@ -147,7 +128,7 @@ export default {
         //获取部门列表
         async fetchData(){
             this.isLoading = true;                        //显示Loading
-            const res = await getStepList({
+            const res = await getGroupList({
                 status: '1',                              //  0：停用 1：正常
                 pageSize: this.pageSize,                  // 分页（每页个数）
                 pageNo: this.pageNo,                      // 当前页
@@ -155,8 +136,8 @@ export default {
             })
            
             this.totalNum = res.data.totalNum;            //总条数
-            this.stepList =  res.data.list;               //部门列表   
-            this.stepList.forEach( item => {
+            this.groupList =  res.data.list;               //分组列表   
+            this.groupList.forEach( item => {
                 item.createdAt = formatDate(new Date(Number(item.createdAt)), "yyyy-MM-dd hh:mm");
                 item.updatedAt = formatDate(new Date(Number(item.updatedAt)), "yyyy-MM-dd hh:mm");
             });                
@@ -165,7 +146,7 @@ export default {
 
         //部门信息详情
         async getInfo(){
-            var res = await getStepInfo({
+            var res = await getGroupInfo({
                 id: '',            //单位id
             })
         },

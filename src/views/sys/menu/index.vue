@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-15 11:59:18
+ * @LastEditTime: 2020-08-13 11:04:56
 --> 
 <template>
     <div class="user-management">
@@ -10,30 +10,18 @@
         <el-card class="operate-container" shadow="never" >
             <div slot="header">
                 <i class="iconfont iconjiaoseguanli2"></i>
-                <span>项目管理</span>
+                <span>菜单管理</span>
                 <el-button size="mini" @click="handleEdit" class="btn-add">新增</el-button>
             </div>
             <div>
                 <!-- 表格 -->
-                <el-table border  fit :data="projectList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
-                    <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
-                    <el-table-column fixed label="项目编号"  prop="itemId" align="center"></el-table-column>
-                    <el-table-column fixed label="项目名称"  prop="itemName" align="center"></el-table-column>
-                    <el-table-column fixed label="所属设备"  prop="deviceName" align="center"></el-table-column>
-                    <el-table-column fixed label="操作人"  prop="updatedUser"  align="center"></el-table-column>
-                    <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column>
-                    <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column>
-                    <el-table-column fixed="left" label="状态"  align="center">
+                <el-table border  fit :data="options" @selection-change="selectChangeFn" highlight-current-row row-key="orgId"  v-loading="isLoading" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+                    <el-table-column fixed label="菜单编号"  prop="menuId" align="center"></el-table-column>
+                    <el-table-column fixed label="菜单名称"  prop="menuName"  align="center"></el-table-column>
+                    <el-table-column fixed label="菜单路径"  prop="menuSrc" align="center"></el-table-column>
+                   <el-table-column fixed label="菜单级数"  prop="menuType" align="center"></el-table-column>
+                    <el-table-column fixed="left" label="操作"  align="center">
                         <template slot-scope="scope">
-                            <el-tag>{{scope.row.status=='0'?'停用':'正常'}}</el-tag>
-                        </template>
-                    </el-table-column>
-
-                    <el-table-column fixed="left" label="操作" width="250" align="center">
-                        <template slot-scope="scope">
-                            <el-button  size="mini" @click.stop="navTo(scope.row)">
-                                添加步骤
-                            </el-button> 
                             <el-button size="mini" @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 
@@ -43,18 +31,6 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <!-- 分页 -->
-                <div class="pagination-container">
-                    <el-pagination
-                    @size-change="handleSizeChange"
-                    @current-change="handleCurrentChange"
-                    :current-page="currentPage"
-                    :page-sizes="[10,15,20,25]" 
-                    background
-                    layout="total, sizes, prev, pager, next, jumper"
-                    :total="totalNum">
-                    </el-pagination>
-                </div>
             </div>
         </el-card>
        
@@ -65,35 +41,52 @@
 </template>
 
 <script>
-import { getProjectList, getProjectInfo, delProject } from '@/api/manage';
-import Edit from "./components/ProEdit";
-import { formatDate } from '@/utils/date'
+import { mapState, mapMutations } from 'vuex'
+import { getAllMenuList } from '@/api/manage';
+import { treeList } from '@/utils/common'
+import Edit from "./components/MenuEdit";
 export default {
     components:{ Edit },
     data(){
         return{
-            pageSize:10,
+            pageSize:1000,
             pageNo:0,
             currentPage:1,
             totalNum:0,
-            projectList:[],         //部门列表
             isLoading:true
         }
     },
     computed:{
-        
+        ...mapState({
+            menuList: state => state.menu.menuList,               //全部菜单列表
+            treeCompanyList: state => state.menu.treeCompanyList,       //菜单树 
+        }),
+        options(){
+            if(this.menuList.length>0){
+                //任何用到此数据的地方都需要判断 因为此数据是异步获取的
+                let list=JSON.parse(JSON.stringify(this.menuList))
+                list.forEach(item => {
+                    item.value=item.menuId;      //适配value值;
+                    item.label=item.menuName;    //适配label值;
+                });
+                list = treeList(list) //递归排序算法
+                this.SET_TREE_MENU(list)
+                return this.treeCompanyList
+            }
+        }
     },
     created(){
-       console.log(this.$route)
        this.fetchData();
     },
     methods:{
-    
+        ...mapMutations(['SET_All_MENU','SET_TREE_MENU','SET_SELECT_TREE_MENU']),
+
         // 新增、编辑
         handleEdit(row) {
             if (row.id) {
                 this.$refs["edit"].showEdit(row);    
             } else {
+                this.$refs["edit"].selectId = ''        //新增是初始上级单位为无上级单位
                 this.$refs["edit"].showEdit();
             }
         },
@@ -104,7 +97,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then( () => {
-                delProject({
+                delCompanyInfo({
                     ids:[ row.id+'' ],               //单位id
                     userId:'admin'                   //用户id
                 }).then( (res) =>　{
@@ -118,10 +111,6 @@ export default {
                 })  
             })  
         },
-        // 跳转至设备管理
-        navTo(row){
-            this.$router.push({path:'/sys/steps',query:{row}})
-        },
         //当前页码发生变化时
         handleCurrentChange(val){
             this.pageNo = val-1;
@@ -132,31 +121,24 @@ export default {
             this.pageSize = val;
             this.fetchData()
         },
-        //获取部门列表
+        //获取单位列表
         async fetchData(){
             this.isLoading = true;                        //显示Loading
-            const res = await getProjectList({
+            const res = await getAllMenuList({
                 status: '1',                              //  0：停用 1：正常
                 pageSize: this.pageSize,                  // 分页（每页个数）
                 pageNo: this.pageNo,                      // 当前页
                 order: ''                                 // 默认创建时间倒序排列
             })
-           
+            var selectMenuList =  JSON.parse(JSON.stringify(res.data));
+            selectMenuList = treeList(selectMenuList) //递归
+            selectMenuList.unshift({menuName: '无上级菜单',toMenuId:'0',menuId:'0'});
             this.totalNum = res.data.totalNum;            //总条数
-            this.projectList =  res.data.list;               //部门列表   
-            this.projectList.forEach( item => {
-                item.createdAt = formatDate(new Date(Number(item.createdAt)), "yyyy-MM-dd hh:mm");
-                item.updatedAt = formatDate(new Date(Number(item.updatedAt)), "yyyy-MM-dd hh:mm");
-            });                
+            this.SET_SELECT_TREE_MENU(selectMenuList)       //保存选择菜单
+            // this.SET_All_MENU(res.data)                  //保存所有菜单
+          
             this.isLoading = false;                       //隐藏loading
         }, 
-
-        //部门信息详情
-        async getInfo(){
-            var res = await getProjectInfo({
-                id: '',            //单位id
-            })
-        },
        
         // 选择表格
         selectChangeFn(){

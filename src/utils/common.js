@@ -36,7 +36,7 @@ export function treeListClass(arr, toMenuId="",treeNumber=-1) {
   return tree
 }
 //递归出树状结构(菜单)
- export function treeList(arr, toMenuId="",treeNumber=-1) {
+ export function treeList(arr, toMenuId="0",treeNumber=-1) {
       var tree = [];
       var temp;
       treeNumber++; //表示层级 0 1 2

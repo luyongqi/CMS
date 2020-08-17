@@ -1,8 +1,8 @@
 <!--
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:27
- * @LastEditors: your name
- * @LastEditTime: 2020-07-15 09:26:20
+ * @LastEditors: luyongqi
+ * @LastEditTime: 2020-08-14 14:55:14
 --> 
 <template>
   <scroll-bar>
@@ -13,6 +13,7 @@
       :collapse="collapse"
       background-color="#304156"
       text-color="#bfcbd9"
+      unique-opened
       active-text-color="#409EFF"
     > 
       <!-- 导航菜单组件 动态组件 -->

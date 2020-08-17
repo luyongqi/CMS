@@ -1,8 +1,8 @@
 <!--
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:12
- * @LastEditors: your name
- * @LastEditTime: 2020-07-31 15:20:38
+ * @LastEditors: luyongqi
+ * @LastEditTime: 2020-08-14 17:46:54
 --> 
 <template>
   <div class="app-wrapper" :class="classObj">

@@ -1,8 +1,8 @@
 <!--
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
- * @LastEditors: your name
- * @LastEditTime: 2020-07-13 11:58:26
+ * @LastEditors: luyongqi
+ * @LastEditTime: 2020-08-14 17:56:00
 --> 
 <template>
   <div id="app">
@@ -29,5 +29,6 @@
     color: #2c3e50;
     min-height:100%;
     min-width:100%;
+
   }
 </style>

@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-08 19:13:41
+ * @LastEditTime: 2020-08-11 17:36:18
 -->
 <template>
   <el-dialog
@@ -31,7 +31,7 @@
             ></el-input>
         </el-form-item>
         <el-form-item prop="stepInputType" label="输入框类型">
-            <el-select v-model="form.stepInputType" @change="inputTypeChange"  placeholder="请选择输入框类型">
+            <el-select v-model="form.stepInputType"   placeholder="请选择输入框类型">
               <el-option
                 v-for="item in inputList"
                 :key="item.value"
@@ -42,7 +42,7 @@
             </el-select>
         </el-form-item>
         <!-- 选项框列表 -->
-        <el-form-item v-if="(currentInputId=='5'||currentInputId=='7')&& optList.length>0">
+        <el-form-item v-if="(form.stepInputType=='5'||form.stepInputType=='7')&& optList.length>0">
              <el-tag
               v-for="(tag,index) in optList"
               :key="index"
@@ -60,25 +60,27 @@
           label="选项内容"
           :prop="optContent"
           :rules="{
-            required: true, message: '内容不能为空', trigger: 'blur'
+             message: '内容不能为空', trigger: 'blur'
           }"
-          v-if="currentInputId=='5'||currentInputId=='7'"
+          v-if="form.stepInputType=='5'||form.stepInputType=='7'"
         >
           <el-input v-model="optContent" style="width:79%" placeholder="请填写选项内容"></el-input>
           <el-button type="primary" @click.prevent="addOpt(optContent)">添加</el-button>
         </el-form-item>
 
-        <el-form-item prop="stepInputMin" label="最小值" v-if="currentInputId=='2'">
+        <el-form-item prop="stepInputMin" label="最小值" v-if="form.stepInputType=='2'">
             <el-input
             v-model.trim="form.stepInputMin"
-            placeholder="请填写最小值"
+            placeholder="请填写最小值(小数不能超过两位)"
+            type="number"
             autocomplete="off"
             ></el-input>
         </el-form-item>
-        <el-form-item prop="stepInputMax" label="最大值" v-if="currentInputId=='2'">
+        <el-form-item prop="stepInputMax" label="最大值" v-if="form.stepInputType=='2'">
             <el-input
             v-model.trim="form.stepInputMax"
-             placeholder="请填写最大值"
+             placeholder="请填写最大值(小数不能超过两位)"
+             type="number"
             autocomplete="off"
             ></el-input>
         </el-form-item>
@@ -107,6 +109,43 @@
   export default {
     name: "DepEdit",
     data() {
+      // 自定义校验规则
+      var validateMax = (rule, value, callback) => {
+        if (value !== '') {
+          /**
+           * @description: 正则规则
+                1、负号可以可无
+                2、小数部分可有可无
+                3、最多精确到2位小数即分位
+                4、整数部分可以是0，整数部分最多9位
+           */
+          var reg = /^(-)?(([1-9]\d{0,8}(\.\d{1,2})?)|(0\.[1-9]\d?))$/; 
+          if(!reg.test(value)){
+            callback(new Error('请输入小数位不超过2位的数值！'));
+          }else if(this.form.stepInputMin>value){
+              callback(new Error('最大值不能小于最小值！'));
+          }else{
+            callback();
+          }
+        } 
+      };
+      var validateMin = (rule, value, callback) => {
+        if (value !== '') {
+          /**
+           * @description: 正则规则
+                1、负号可以可无
+                2、小数部分可有可无
+                3、最多精确到2位小数即分位
+                4、整数部分可以是0，整数部分最多9位
+           */
+          var reg = /^(-)?(([1-9]\d{0,8}(\.\d{1,2})?)|(0\.[1-9]\d?))$/; 
+          if(!reg.test(value)){
+            callback(new Error('请输入小数位不超过2位的数值！'));
+          }else{
+            callback();
+          }
+        } 
+      };
       return {
         form: {       
           itemId:'',              //所属项目id 
@@ -123,8 +162,7 @@
           { label:'单选框', value:'5' },
           { label:'多选框', value:'7' },
           { label:'文件/图片', value:'9' },
-        ],  
-        currentInputId:'',       //当前输入框类型id           
+        ],            
         itemList:[],              //所属项目列表
         optContent:'',            //选项框值
         optList:[],               //选项列表
@@ -139,8 +177,14 @@
           stepInputType:[
             { required: true, message: '请选择输入框类型', trigger: 'change' }
           ],
+          stepInputMin: [             //自定义校验最小值
+            { validator: validateMin, trigger: 'blur' }
+          ],
+          stepInputMax: [             //自定义校验最大值
+            { validator: validateMax, trigger: 'blur' }
+          ],
           stepContent:[
-            { required: true, message: '请选择输入步骤内容', trigger: 'blur' }
+            { required: true, message: '请输入步骤内容', trigger: 'blur' }
           ],
         },
         title: "",
@@ -164,6 +208,7 @@
             } else {
               this.title = "编辑";
               this.form = Object.assign({}, row);
+              this.optList = row.stepInputContent.split(';')  //初始化单选或多选框值
             }
             this.dialogFormVisible = true;
         },
@@ -172,16 +217,19 @@
             this.$refs["form"].resetFields();
             this.form = this.$options.data().form;
             this.dialogFormVisible = false;
-            this.currentInputId = ''      //初始化当前输入框类型id，放在关闭后依然显示添加输入框
+            this.optList = [];            //单选或多选框的值
         },
-        //输入框类型发生变化时 
-        inputTypeChange(val){
-          console.log(val)
-          this.currentInputId = val
-        },
+        
         // 添加选项
         addOpt(val){
-          console.log(val)
+          if(val==''){
+            this.$message({
+              message: '填写的内容不能为空！',
+              type: 'warning',
+              offset:120
+            })
+            return
+          }
           this.optList.push(val)
           this.optContent = ''
         },
@@ -201,21 +249,31 @@
         },
         // 保存数据
         save() {
-            this.$refs["form"].validate(async (valid) => {
-                if (valid) {
-                    this.form.userId = 'admin';                       //设置用户id
-                    const res = await addStep(this.form);
-                    if(!res) return;
-                    this.$message({
-                        message: '保存成功',
-                        type: 'success'
-                    });
-                    this.$emit("fetchData");
-                    this.close();
-                } else {
-                    return false;
-                }
-            });
+          this.$refs["form"].validate(async (valid) => {
+              this.form.stepInputContent = this.optList.join(";")        //选项内容
+              this.form.userId = 'admin';                            //设置用户id
+              if((this.form.stepInputType=='5'||this.form.stepInputType=='7')&&this.optList.length==0){
+                this.$message({
+                  type:'warning',
+                  message:'至少需要添加一个选项',
+                  offset:120
+                })
+                return
+              }
+              if (valid) {
+                  const res = await addStep(this.form);
+                  if(!res) return;
+                  this.$message({
+                      message: '保存成功',
+                      type: 'success',
+                      offset:120
+                  });
+                  this.$emit("fetchData");
+                  this.close();
+              } else {
+                  return false;
+              }
+          });
         },
     },
   };

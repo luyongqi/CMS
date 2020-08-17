@@ -121,7 +121,7 @@ export default {
   left: 0;
   top: 0;
   background: #304156;
-  z-index: 3000;
+  z-index: 1000;
   &:after {
     display: table;
     width: 100%;

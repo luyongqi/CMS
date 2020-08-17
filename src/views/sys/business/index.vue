@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-08 10:07:37
+ * @LastEditTime: 2020-08-14 16:26:50
 --> 
 <template>
     <div class="user-management">
@@ -16,10 +16,10 @@
             <div>
                 <!-- 表格 -->
                 <el-table border  fit :data="options" @selection-change="selectChangeFn" highlight-current-row row-key="orgId"  v-loading="isLoading" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-                    <el-table-column fixed label="单位id" width="200" prop="orgId" align="center"></el-table-column>
-                    <el-table-column fixed label="单位名称"  prop="orgName" width="200" align="center"></el-table-column>
-                    <el-table-column fixed label="单位地址"  prop="address"></el-table-column>
-                    <el-table-column fixed="left" label="状态" width="200" align="center">
+                    <el-table-column fixed label="单位编号"  prop="orgId" align="center"></el-table-column>
+                    <el-table-column fixed label="单位名称" prop="orgName" align="center"></el-table-column>
+                    <el-table-column fixed label="单位地址"  prop="address" align="center"></el-table-column>
+                    <el-table-column fixed="left" label="状态"  align="center">
                         <template slot-scope="scope">
                             <el-tag>{{scope.row.status=='0'?'停用':'正常'}}</el-tag>
                         </template>
@@ -149,7 +149,7 @@ export default {
             })
             var selectCompanyList =  JSON.parse(JSON.stringify(res.data.list));
             selectCompanyList = treeCompany(selectCompanyList) //递归
-            selectCompanyList.unshift({orgName: '无上级菜单',parentOrgId:'0',orgId:'0'});
+            selectCompanyList.unshift({orgName: '无上级单位',parentOrgId:'0',orgId:'0'});
             this.totalNum = res.data.totalNum;            //总条数
              
             this.SET_SELECT_List(selectCompanyList)       //保存选择菜单
