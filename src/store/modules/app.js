@@ -1,14 +1,15 @@
 /*
  * @Author: 卢勇其
  * @Date: 2020-07-10 10:59:51
- * @LastEditors: your name
- * @LastEditTime: 2020-07-10 16:08:07
+ * @LastEditors: luyongqi
+ * @LastEditTime: 2020-09-17 15:04:08
  */ 
 
 const app = {
   state: {
     withoutAnimation: false,    //侧边栏收缩时动画
     collapse:false,              // 导航栏收缩状态
+    menuRouteLoaded:false,        //菜单和路由是否加载
     device: 'desktop'            //当前设备是桌面  
   },
   getters: {
@@ -28,6 +29,10 @@ const app = {
     // 展开侧边栏
     OPEN_SIDEBAR: (state) =>{
       state.collapse = false;
+    },
+     // 改变菜单和路由的加载状态
+    SET_ROUTE_LOAD_STATUS(state, menuRouteLoaded){  
+      state.menuRouteLoaded = menuRouteLoaded;
     },
     // 关闭侧边栏
     CLOSE_SIDEBAR: (state, withoutAnimation) => {

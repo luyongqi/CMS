@@ -2,308 +2,199 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-15 14:30:22
+ * @LastEditTime: 2020-09-18 11:40:03
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '../views/layout/Layout'
 import store from '@/store'
+import { getToken,removeToken } from '@/utils/auth'
+import { getAllMenuList } from '@/api/manage';
+import { treeList } from '@/utils/common'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)
 }; //阻止router跳转同一页面 加入历史栈中
-
+const whiteList = ['/login'] // 不重定向白名单
 Vue.use(Router)
 
  //静态菜单
 export const constantRouterMap = [     
   {
-    path: '/login',
-    name: 'Login',
-    component: () => import('@/views/login'),
-    hidden: true
+    path:'/',
+  
+    component: Layout,
+    redirect: '/home',
+    meta: {title: '首页', index:"64f95101202b4594b2bad18fd425e804"},
+    children: [
+      {
+        path: 'home',
+        component: () => import('@/views/home/index'),
+        meta: {title: '我的工作台', index:'6f3dd69b32614bb6b293270eec3afb58'},
+      },
+      {
+        path: 'sys/orderDetail',
+        component: () => import('@/views/sys/order/orderDetail'),
+        meta: {title: '工单审核详情', index:"0bd81a48e0d944098a6842c809b15c20"},
+      },
+      {
+        path: 'sys/orderDataDetail',
+        component: () => import('@/views/sys/order/orderDataDetail'),
+        meta: {title: '工单数据详情', index:"8e312ec1b0574bc0abc13e194d7cace6"},
+      },
+      {
+        path: 'sys/roles/allocMenu',
+        component: () => import('@/views/sys/roles/allocMenu'),
+        meta: {title: '分配菜单', index:"25b1c9a6b03749a4b279503c88a89dbf"},
+      },
+    ]
   },
+  {
+    path: '/login',
+    component: () => import('@/views/login'),
+  },
+  
   { 
     path: '/404', 
     component: () => import('@/views/404'),
-    hidden: true 
-  },
-]
-
-//动态菜单
-export const asyncRouterMap = [            
-  {
-    path:'/',
-    name:'home',
-    component: Layout,
-    redirect: '/home',
-    meta: {title: '首页', icon:'iconshouye'},
-    children: [
-      {
-        path: 'home',
-        name: 'homepage',
-        component: () => import('@/views/home/index'),
-        meta: {title: '我的工作台', icon:'iconshouye'},
-      },
-    ]
-  },
-  {
-    path:'/sys',
-    name:'sys',
-    component: Layout,
-    redirect: '/sys/user',
-    meta: {title: '系统管理', icon:'iconshouye'},
-    children: [
-      {
-        path: 'user',
-        name: 'user',
-        component: () => import('@/views/sys/user'),
-        meta: {title: '用户管理', icon:'iconyonghuguanli'},
-      },
-      {
-        path: 'menu',
-        name: 'menu',
-        component: () => import('@/views/sys/menu'),
-        meta: {title: '菜单管理', icon:'iconjiaoseguanli'},
-      },
-      {
-        path: 'roles',
-        name: 'roles',
-        component: () => import('@/views/sys/roles'),
-        meta: {title: '角色管理', icon:'iconjiaoseguanli'},
-      },
-      {
-        path: 'business',
-        name: 'business',
-        component: () => import('@/views/sys/business'),
-        meta: {title: '单位管理', icon:'icontubiao_qiyeguanli-copy'},
-      },
-      {
-        path: 'division',
-        name: 'division',
-        component: () => import('@/views/sys/division'),
-        meta: {title: '部门管理', icon:'iconbumenguanli'},
-      },
-      {
-        path: 'facility',
-        name: 'facility',
-        component: () => import('@/views/sys/facility'),
-        meta: {title: '设备管理', icon:'iconshebeiguanli'},
-      },
-     
-      {
-        path: 'project',
-        name: 'project',
-        component: () => import('@/views/sys/project'),
-        meta: {title: '项目管理', icon:'iconziyuan'},
-      },
-      
-      {
-        path: 'steps',
-        name: 'stepDetail',
-        component: () => import('@/views/sys/steps'),
-        meta: {title: '步骤管理', icon:'iconzhijianbuzhou'},
-      },
-      {
-        path: 'steps/stepDetail',
-        name: 'steps',
-        component: () => import('@/views/sys/steps/stepDetail'),
-        meta: {title: '步骤详情', icon:'iconzhijianbuzhou'},
-        hidden:true
-      },
-      {
-        path: 'group',
-        name: 'group',
-        component: () => import('@/views/sys/group'),
-        meta: {title: '分组管理', icon:'iconjiaoseguanli'},
-      },
-      {
-        path: 'staff',
-        name: 'staff',
-        component: () => import('@/views/sys/staff'),
-        meta: {title: '人员管理', icon:'iconjiaoseguanli'},
-        children:[
-          
-        ]
-      },
-      {
-        path: 'order',
-        name: 'order',
-        component: () => import('@/views/sys/order'),
-        meta: {title: '工单管理', icon:'icongongdanguanli'},
-      },
-      {
-        path: 'orderAuth',
-        name: 'orderAuth',
-        component: () => import('@/views/sys/order/orderAuth'),
-        meta: {title: '工单审核处理', icon:'icongongdanguanli'},
-      },
-      {
-        path: 'orderDetail',
-        name: 'orderDetail',
-        component: () => import('@/views/sys/order/orderDetail'),
-        meta: {title: '工单审核详情', icon:'icongongdanguanli'},
-        hidden:true
-      },
-      {
-        path: 'orderDataList',
-        name: 'orderDataList',
-        component: () => import('@/views/sys/order/orderDataList'),
-        meta: {title: '工单数据列表', icon:'icongongdanguanli'},
-      },
-    ]
-  },
-  {
-    path: '*', 
-    redirect: '/404',
-    hidden: true
-  }
-]
-
-const asyncMenu = [
-  {
-    path:'/',
-    name:'home',
-    component: Layout,
-    redirect: '/home',
-    meta: {title: '首页', icon:'iconshouye'},
-    children: [
-      {
-        path: 'home',
-        name: 'homepage',
-        component: () => import('@/views/home/index'),
-        meta: {title: '我的工作台', icon:'iconshouye'},
-      },
-    ]
-  },
-  {
-    path:'/sys',
-    name:'sys',
-    component: Layout,
-    redirect: '/sys/user',
-    meta: {title: '系统管理', icon:'iconshouye'},
-    children: [
-      {
-        name: 'apply',
-        meta: {title: '权限管理', icon:'iconyonghuguanli'},
-        children:[
-          {
-            name: 'user',
-            meta: {title: '用户列表', icon:'iconyonghuguanli'},
-          },
-          {
-            name: 'menu',
-            meta: {title: '菜单列表', icon:'iconjiaoseguanli'},
-          },
-          {
-            name: 'roles',
-            meta: {title: '角色列表', icon:'iconjiaoseguanli'},
-          },
-        ]
-      },
-      
-      {
-        name: 'businessManage',
-        meta: {title: '单位管理', icon:'icontubiao_qiyeguanli-copy'},
-        children:[
-          {
-            name: 'business',
-            meta: {title: '单位列表', icon:'icontubiao_qiyeguanli-copy'},
-          },
-          {
-            name: 'division',
-            meta: {title: '部门列表', icon:'iconbumenguanli'},
-          },
-          {
-            name: 'facility',
-            meta: {title: '设备列表', icon:'iconshebeiguanli'},
-          },
-        ]
-      },
-      
-      {
-        name: 'projectManage',
-        meta: {title: '项目管理', icon:'iconziyuan'},
-        children:[
-          {
-            name: 'project',
-            meta: {title: '项目列表', icon:'iconziyuan'},
-          },
-          {
-            name: 'stepDetail',
-            meta: {title: '步骤列表', icon:'iconzhijianbuzhou'},
-          },
-        ]
-      }, 
-      {
-        name: 'staffMange',
-        meta: {title: '人员管理', icon:'iconjiaoseguanli'},
-        children:[
-          {
-            name: 'group',
-            meta: {title: '人员分组', icon:'iconjiaoseguanli'},
-          },
-          {
-            name: 'staff',
-            meta: {title: '人员列表', icon:'iconjiaoseguanli'},
-          }
-        ]
-      },
-      {
-        name: 'orderManage',
-        meta: {title: '工单管理', icon:'icongongdanguanli'},
-        children:[
-          {
-            name: 'order',
-            meta: {title: '工单列表', icon:'icongongdanguanli'},
-          },
-          {
-            name: 'orderAuth',
-            meta: {title: '工单审核处理', icon:'icongongdanguanli'},
-          },
-          {
-            name: 'orderDataList',
-            meta: {title: '工单数据列表', icon:'icongongdanguanli'},
-          },
-        ]
-      },
-      
-    ]
   },
 ]
 
 const router = new Router({
-  routes: constantRouterMap.concat(asyncRouterMap)
+  routes: constantRouterMap
 })
 
 // 路由守卫
 router.beforeEach((to, from, next)=>{
-  if( store.state.menu.menuList.length===0 ){
-    let list = getMenuList() 
-    store.dispatch('getMenuList',list)
-  }
-  next()
-})
-
-// 根据动态路由筛选菜单
-function getMenuList(){
-  const menu = asyncMenu.filter( v => {
-    if( v.hidden !== undefined && v.hidden === true ){
-      return false
+  // removeToken()       
+  let  token = getToken(); 
+  if(token){
+    if(to.path === '/login'){                //token未失效时 重定向到主页
+      next({path:'/home'})
     }else{
-      if( v.children && v.children.length > 0 ){
-        v.children = v.children.filter( child => {
-          if(child.hidden !== undefined && child.hidden === true){
-            return false
-          }
-          return child  
+   
+      // addDynamicMenuAndRoutes( to,from,next )
+      // next()
+      // 加载动态菜单和路由 
+      if(store.state.user.roles.length===0){
+        store.dispatch('GetInfo',{token}).then( res =>{   //拉取用户信息
+          addDynamicMenuAndRoutes( to,from,next )
+          next()
+        }).catch((err)=>{
+          store.dispatch( 'LogOut' ).then(()=>{
+              Message.error(err || 'Verification failed, please login again')
+              next({ path:'/home' })
+          })
         })
-      }       
+      }else{
+        next()
+      }
     }
-    return true
+  } else{
+   
+    if (whiteList.indexOf(to.path) !== -1) {
+      next()
+    } else {
+      next('/login')
+    }
+  }
+
+})
+/**
+ * 处理路由到本地直接指定页面组件的情况
+ * 比如'代码生成'是要求直接绑定到'Generator'页面组件
+ */
+function handleStaticComponent(router, dynamicRoutes) {
+  for(let j=0;j<dynamicRoutes.length; j++) {
+    if(dynamicRoutes[j].name == '代码生成') {
+      dynamicRoutes[j].component = Generator
+      break
+    }
+  }
+  router.options.routes[0].children = router.options.routes[0].children.concat(dynamicRoutes)
+  router.options.routes.push({
+    path:'*',
+    redirect:'/404'
   })
-  return menu
 }
+
+/**
+* 加载动态菜单和路由
+*/
+function addDynamicMenuAndRoutes(to,from) {
+
+  if( store.state.app.menuRouteLoaded ) {      //判断菜单和路由是否已存在 
+    return
+  }
+  
+  getAllMenuList().then(res => {             //获取所有菜单
+
+    // 添加动态路由
+    let dynamicRoutes = addDynamicRoutes(treeList(res.data))
+ 
+    // 处理静态组件绑定路由
+    handleStaticComponent(router, dynamicRoutes)
+
+    router.addRoutes(router.options.routes)
+    
+    router.onReady(()=>{
+      // 保存菜单树 
+      store.commit('SET_TREE_MENU', treeList(res.data))
+
+      // 保存加载状态
+      store.commit('SET_ROUTE_LOAD_STATUS', true)
+
+      // 保存菜单数组
+      store.commit('SET_All_MENU',res.data)
+    }) 
+    
+  }).catch(function(err) {
+    
+  })
+}
+
+/**
+* 添加动态(菜单)路由
+* @param {*} menuList 菜单列表
+* @param {*} routes 递归创建的动态(菜单)路由
+*/
+function addDynamicRoutes (menuList = [], routes = []) {
+  var temp = []
+  for (var i = 0; i < menuList.length; i++) {
+    if (menuList[i].children && menuList[i].children.length >= 1) {
+      temp = temp.concat(menuList[i].children)
+    } else if (menuList[i].menuSrc && /\S/.test(menuList[i].menuSrc)) {
+       menuList[i].menuSrc = menuList[i].menuSrc.replace(/^\//, '')
+       // 创建路由配置
+       var route = {
+         path: menuList[i].menuSrc,
+         component: null,
+        //  name: menuList[i].menuSrc,
+         meta: {
+           icon: menuList[i].menuIcon,
+           index: menuList[i].menuId
+         }
+       }
+      
+      // 根据菜单URL动态加载vue组件，这里要求vue组件须按照url路径存储
+      // 如url="sys/user"，则组件路径应是"@/views/sys/user.vue",否则组件加载不到
+      let array = menuList[i].menuSrc.split('/')
+      let url = ''
+      for(let i=0; i<array.length; i++) {
+          url += array[i].substring(0,1) + array[i].substring(1) + '/'
+      }
+      url = url.substring(0, url.length - 1)
+      route['component'] =  () => import(`@/views/${url}`)
+      routes.push(route)
+    }
+  }
+  if (temp.length >= 1) {
+    addDynamicRoutes(temp, routes)
+  } else {
+    
+  }
+  return routes
+ }
 
 export default router

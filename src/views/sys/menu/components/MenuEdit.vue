@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-13 11:10:44
+ * @LastEditTime: 2020-09-17 11:33:28
 -->
 <template>
   <el-dialog
@@ -51,7 +51,7 @@
             show-word-limit
             ></el-input>
         </el-form-item>
-        <el-form-item label="菜单类型" prop="menuType">
+        <!-- <el-form-item label="菜单类型" prop="menuType">
             <el-select v-model="form.menuType"   placeholder="请选择">
               <el-option
                 v-for="item in typeList"
@@ -61,7 +61,7 @@
                 style="width:100%"
               ></el-option>
             </el-select>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="排序" prop="menuSort">
             <el-input
             v-model.trim="form.menuSort"
@@ -88,15 +88,15 @@
     name: "UntilManagementEdit",
     data() {
       return {
-        selectId:'0',            //默认选中上级菜单id
+        selectId:'0',           //默认选中上级菜单id
         form: {
-            toMenuId:'0',        //上级单位id  
+            toMenuId:'0',       //上级单位id  
             menuName:'',        //菜单名称
             menuId:'',          //菜单id
             menuSrc:'',         //菜单路径
             menuIcon:'',        //菜单图标
             menuSort:'',        //菜单序号
-            menuType:'',        //菜单类型
+            menuType:'0',        //菜单类型
             subpage:''          //子页面
         },
         typeList:[              //角色类型列表
@@ -109,6 +109,12 @@
           menuName: [
             { required: true, trigger: "blur", message: "请输入单位名称" },
           ],
+          toMenuId: [
+            { required: true, trigger: "change", message: "请选择菜单上级菜单" },
+          ],
+          menuSrc: [
+            { required: true, trigger: "blur", message: "请填写菜单路径" },
+          ],
           menuType: [
             { required: true, trigger: "change", message: "请选择菜单类型" },
           ],
@@ -119,7 +125,7 @@
     },
     computed:{
         ...mapState({
-              selectTreeMenuList: state => state.menu.selectTreeMenuList    //选择上级菜单树
+          selectTreeMenuList: state => state.menu.selectTreeMenuList    //选择上级菜单树
         })
     },
     created() { 

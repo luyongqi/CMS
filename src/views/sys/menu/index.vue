@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-13 11:04:56
+ * @LastEditTime: 2020-09-18 10:03:16
 --> 
 <template>
     <div class="user-management">
@@ -15,11 +15,12 @@
             </div>
             <div>
                 <!-- 表格 -->
-                <el-table border  fit :data="options" @selection-change="selectChangeFn" highlight-current-row row-key="orgId"  v-loading="isLoading" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
-                    <el-table-column fixed label="菜单编号"  prop="menuId" align="center"></el-table-column>
-                    <el-table-column fixed label="菜单名称"  prop="menuName"  align="center"></el-table-column>
+                <el-table border  fit :data="options" @selection-change="selectChangeFn" highlight-current-row row-key="menuId"  v-loading="isLoading" :tree-props="{children: 'children', hasChildren: 'hasChildren'}">
+                    <!-- <el-table-column fixed label="菜单编号"  prop="menuId" align="center"></el-table-column> -->
+                    <el-table-column fixed label="菜单名称"  prop="menuName"  ></el-table-column>
                     <el-table-column fixed label="菜单路径"  prop="menuSrc" align="center"></el-table-column>
-                   <el-table-column fixed label="菜单级数"  prop="menuType" align="center"></el-table-column>
+                     <el-table-column fixed label="菜单图标"  prop="menuIcon" align="center"></el-table-column>
+                   <el-table-column fixed label="菜单类型"  prop="menuType" align="center"></el-table-column>
                     <el-table-column fixed="left" label="操作"  align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" @click.stop="handleEdit(scope.row)">
@@ -71,7 +72,7 @@ export default {
                 });
                 list = treeList(list) //递归排序算法
                 this.SET_TREE_MENU(list)
-                return this.treeCompanyList
+                return list
             }
         }
     },
@@ -83,7 +84,7 @@ export default {
 
         // 新增、编辑
         handleEdit(row) {
-            if (row.id) {
+            if (row.menuId) {
                 this.$refs["edit"].showEdit(row);    
             } else {
                 this.$refs["edit"].selectId = ''        //新增是初始上级单位为无上级单位
@@ -121,23 +122,19 @@ export default {
             this.pageSize = val;
             this.fetchData()
         },
-        //获取单位列表
+        //获取所有菜单
         async fetchData(){
-            this.isLoading = true;                        //显示Loading
-            const res = await getAllMenuList({
-                status: '1',                              //  0：停用 1：正常
-                pageSize: this.pageSize,                  // 分页（每页个数）
-                pageNo: this.pageNo,                      // 当前页
-                order: ''                                 // 默认创建时间倒序排列
-            })
+            this.isLoading = true;                            //显示Loading
+            const res = await getAllMenuList({ })
             var selectMenuList =  JSON.parse(JSON.stringify(res.data));
-            selectMenuList = treeList(selectMenuList) //递归
+            selectMenuList = treeList(selectMenuList)         //递归
             selectMenuList.unshift({menuName: '无上级菜单',toMenuId:'0',menuId:'0'});
-            this.totalNum = res.data.totalNum;            //总条数
-            this.SET_SELECT_TREE_MENU(selectMenuList)       //保存选择菜单
-            // this.SET_All_MENU(res.data)                  //保存所有菜单
-          
-            this.isLoading = false;                       //隐藏loading
+            this.totalNum = res.data.totalNum;                //总条数
+
+            this.SET_SELECT_TREE_MENU(selectMenuList)         //保存选择菜单
+            this.SET_All_MENU(res.data)                      //保存所有菜单
+
+            this.isLoading = false;                           //隐藏loading
         }, 
        
         // 选择表格

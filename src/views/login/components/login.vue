@@ -48,6 +48,7 @@
 
 <script>
   import  {mapState} from 'vuex'
+  import {setSupport,getSupport,setCookie,getCookie} from '@/utils/support';
   export default {
     name: 'login',
     data() {
@@ -90,25 +91,43 @@
    
     },
     created() {
-     
+      this.loginForm.username = getCookie("username");
+      this.loginForm.password = getCookie("password");
+      if(this.loginForm.username === undefined||this.loginForm.username==null||this.loginForm.username===''){
+        this.loginForm.username = 'admin';
+      }
+      if(this.loginForm.password === undefined||this.loginForm.password==null){
+        this.loginForm.password = '';
+      }
     },
     methods: {
         changeComponent(){
             this.$emit('update:showFlag',!this.showFlag)
         },
+        // 显示密码
         showPwd() {
             if (this.pwdType === 'password') {
-            this.pwdType = ''
+              this.pwdType = ''
             } else {
-            this.pwdType = 'password'
+              this.pwdType = 'password'
             }
         },
+        // 登录
         handleLogin() {
-          this.$router.push('/')
             this.$refs.loginForm.validate(valid => {
               if (valid) {
-                  
-              }
+                this.loading = true;
+                this.$store.dispatch('Login', this.loginForm).then(() => {
+                  this.loading = false;
+                  setCookie("username",this.loginForm.username,30);
+                  setCookie("password",this.loginForm.password,30);
+                  this.$router.push('/')
+                }).catch(() => {
+                  this.loading = false
+                })
+              } else {
+                return false
+              } 
             })
         },
     }

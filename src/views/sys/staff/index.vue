@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-17 18:30:05
+ * @LastEditTime: 2020-08-19 09:50:51
 --> 
 <template>
     <div class="user-management">
@@ -28,7 +28,7 @@
             <div>
                 <!-- 表格 -->
                 <el-table border  fit :data="staffList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
-                     <el-table-column fixed type="selection" width="60" align="center"></el-table-column>
+                    <el-table-column fixed type="selection" width="60" align="center"></el-table-column>
                     <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
                     <el-table-column fixed label="员工编号"  prop="userId" align="center"></el-table-column>
                     <el-table-column fixed label="员工姓名"  prop="userName" align="center"></el-table-column>
@@ -245,7 +245,7 @@ export default {
             this.listQuery.pageSize = val;
             this.fetchData()
         },
-        //获取部门列表
+        //获取人员列表
         async fetchData(){
             this.isLoading = true;                        //显示Loading
             const res = await getStaffList(this.listQuery)
@@ -255,7 +255,7 @@ export default {
             this.isLoading = false;                       //隐藏loading
         }, 
 
-        //部门信息详情
+        //人员详情
         async getInfo(){
             var res = await getStaffInfo({
                 id: '',            //单位id
@@ -263,7 +263,7 @@ export default {
         },
        
         // 选择表格
-        selectChangeFn(){
+        selectChangeFn(val){
             this.multipleSelection = val;
         },
         

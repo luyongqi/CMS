@@ -1,8 +1,8 @@
 <!--
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:43:58
- * @LastEditors: your name
- * @LastEditTime: 2020-07-25 09:08:08
+ * @LastEditors: luyongqi
+ * @LastEditTime: 2020-09-10 10:37:51
 --> 
 <template>
   <div>
@@ -32,7 +32,7 @@
     },
     watch:{
       loginOrRegisterFlag(strnew){
-        console.log(strnew)
+       
       }
     },
     components:{

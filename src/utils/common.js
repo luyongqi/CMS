@@ -65,8 +65,8 @@ export function treeListClass(arr, toMenuId="",treeNumber=-1) {
 //       tree=tree.concat(getNavBarList(arr,temp.toMenuId));
 //     }
 //     return tree;
-//   }
-export function getNavBarList(arr,menuId='') {
+// }
+export function getNavBarList(arr,menuId='0') {
   var tree = new Array();
   var temp;
   do{
@@ -74,7 +74,7 @@ export function getNavBarList(arr,menuId='') {
     temp = getCurrentDom(arr, menuId);
     tree.push(temp);
     menuId = temp.toMenuId;
-  }while(menuId != '');
+  }while(menuId != '0');
   return tree.reverse()          //数组反转
 }
 //根据menuId 获取当前节点

@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-17 16:50:23
+ * @LastEditTime: 2020-08-20 17:54:03
 --> 
 <template>
     <div class="user-management">
@@ -202,53 +202,53 @@ export default {
         },
         // 批量操作
         handleBatchOperate() {
-        if(this.operateType==null){
-          this.$message({
-            message: '请选择操作类型',
-            type: 'warning',
-            duration: 3000
-          });
-          return;
-        }
-        if(this.multipleSelection==null||this.multipleSelection.length<1){
-          this.$message({
-            message: '请选择要操作的工单',
-            type: 'warning',
-            duration: 3000
-          });
-          return;
-        }
-        this.$confirm('是否要进行该批量操作?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let ids=[];
-          for(let i=0;i<this.multipleSelection.length;i++){
-            ids.push(this.multipleSelection[i].id+'');
-          }
+            if(this.operateType==null){
+            this.$message({
+                message: '请选择操作类型',
+                type: 'warning',
+                duration: 3000
+            });
+            return;
+            }
+            if(this.multipleSelection==null||this.multipleSelection.length<1){
+            this.$message({
+                message: '请选择要操作的工单',
+                type: 'warning',
+                duration: 3000
+            });
+            return;
+            }
+            this.$confirm('是否要进行该批量操作?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+            let ids=[];
+            for(let i=0;i<this.multipleSelection.length;i++){
+                ids.push(this.multipleSelection[i].id+'');
+            }
 
-          switch (this.operateType) {
-            case 'delete':
-                delWork({
-                    ids:ids,
-                    userId:'admin'
-                }).then( res => {
-                    if(res.retCode==='000000'){
-                        this.fetchData();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success',
-                            duration: 3000
-                        });
-                    } 
-                })
-              break;
-            default:
-              break;
-          }
-        });
-      },
+            switch (this.operateType) {
+                case 'delete':
+                    delWork({
+                        ids:ids,
+                        userId:'admin'
+                    }).then( res => {
+                        if(res.retCode==='000000'){
+                            this.fetchData();
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success',
+                                duration: 3000
+                            });
+                        } 
+                    })
+                break;
+                default:
+                break;
+            }
+            });
+        },
         // 跳转至详情页
         navToDetail(row){
             this.$router.push({ path:'/sys/steps/stepDetail', query:{row} })

@@ -2,22 +2,22 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:32
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-06 11:17:08
+ * @LastEditTime: 2020-09-18 09:25:13
 --> 
 <template>
-  <el-submenu v-if="menu.children && menu.children.length > 0 && !menu.hidden" :index="menu.name">
+  <el-submenu v-if="menu.children && menu.children.length >= 1" :index="menu.menuId">
     <template slot="title">
-      <i class="iconfont" :class="menu.meta.icon" ></i>
-      <span slot="title">{{menu.meta.title}}</span>
+      <i class="iconfont" :class="menu.menuIcon" ></i>
+      <span slot="title">{{menu.menuName}}</span>
     </template>
     <template v-if="menu.children">
-      <MenuTree v-for="(item,index) in menu.children"  :key="index" :menu="item"></MenuTree>
+      <MenuTree v-for="item in menu.children" :key="item.menuId" :menu="item"></MenuTree>
     </template>
   </el-submenu>
 
-  <el-menu-item v-else :index="menu.name" class="submenu-title-noDropdown" @click="handleRoute(menu.name)">
-    <i class="iconfont" :class="menu.meta.icon"></i>
-    <span slot="title">{{menu.meta.title}}</span>
+  <el-menu-item v-else :index="menu.menuId" class="submenu-title-noDropdown" @click="handleRoute(menu)">
+    <i class="iconfont" :class="menu.menuIcon"></i>
+    <span slot="title">{{menu.menuName}}</span>
   </el-menu-item>
 </template>
 
@@ -35,8 +35,8 @@ export default {
     
   },
   methods: {
-    handleRoute (name) {
-      this.$router.push({name})
+    handleRoute (menu) {
+      this.$router.push('/'+menu.menuSrc)
     }
   }
 }

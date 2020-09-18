@@ -6,10 +6,10 @@
     <el-row :gutter="20" class="nav">
       <!-- 导航列表 -->
       <el-col :xs="18" :sm="18" :md="18" :lg="21" :xl="21">
-        <div class="nav-top-list">
+        <div class="nav-top-list" v-if="navBarList[0]">
           <!-- 导航组件 -->
           <el-menu
-           :default-active="$route.matched[0].name"
+           :default-active="navBarList[0].menuId"
             class="el-menu-demo"
             mode="horizontal"
             @select="selectFn"
@@ -19,10 +19,10 @@
           >
             <el-menu-item
               class="el-element-item"
-              v-for="(item,index) in menuList"
+              v-for="(item,index) in navTree"
               :key="index"
-              :index="item.name"
-            >{{item.meta.title}}</el-menu-item>
+              :index="item.menuId"
+            >{{item.menuName}}</el-menu-item>
           </el-menu>
 
         </div>
@@ -64,6 +64,7 @@
 import { mapState, mapMutations } from "vuex";
 
 export default {
+  naem:'navtop',
   data() {
     return {
       avatarImg: require("@/assets/images/avatar01.jpg"),
@@ -72,25 +73,43 @@ export default {
 
   computed: {
     ...mapState({
-      menuList: state => state.menu.menuList
+      navTree: state => state.menu.treeMenuList,
+      navBarList:state => state.menu.navBarList       //导航栏数组
     })
   },
 
   //组件创建的时候获取路由的数组
   created() {
-    
+
   },
   
   methods: {
     ...mapMutations(['SET_SIDE_LIST']),
 
-    selectFn(name){
-      //根据name 筛选出侧边栏导航菜单
-      let sideMenuList = this.menuList.filter((item,index)=>{
-        return item.name == name  
+    // 根据父级id查找侧边栏点击导航 选择顶部导航时重定向到第一项
+    selectFn(menuId) {
+
+      //根据menuId筛选出侧边导航栏
+      let sliderTree = this.navTree.filter((item,index)=>{
+        return item.menuId == menuId  
       })
-      // this.SET_SIDE_LIST(sideMenuList[0])  
-      this.$router.push({name})
+      this.SET_SIDE_LIST(sliderTree[0]);      //保存当前选中项的侧边栏菜单;
+
+      var obj = this.getMenuSrc(sliderTree[0].children[0])
+  
+      // 通过菜单URL跳转至指定路由
+      this.$router.push('/'+obj.menuSrc)
+    },
+    // 返回顶级菜单下第一级子菜单
+    getMenuSrc(obj){
+      let temp;
+      if(obj.children&&obj.children.length>0){
+        temp = obj.children[0]
+        this.getMenuSrc(temp)
+        return temp
+      }else{
+        return obj
+      }
     },
     // 回到首页
     gotoHome() {
@@ -98,7 +117,17 @@ export default {
     },
     // 退出登录
     logout() {
-       this.$router.push({ path: "/login" });
+       this.$store.dispatch('LogOut').then((res) => {
+         if(res.retCode==='000000'){
+           this.$message({
+              message:'退出成功',
+              type:'success',
+              duration:2000
+            })
+            this.$router.push('/login')
+         }
+        // location.reload()    // 为了重新实例化vue-router对象 避免bug
+      })
     }
   }
 };
@@ -107,7 +136,6 @@ export default {
 <style lang="scss" scoped>
 .el-menu-demo {
   width: 100%;
-
   background-color: transparent;
   border-bottom: none;
   .el-element-item {

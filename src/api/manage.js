@@ -2,27 +2,27 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 16:13:30
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-15 14:36:20
+ * @LastEditTime: 2020-09-18 15:27:56
  */ 
 import instance  from './index.js'
 
 // 登录管理
-export const login = (data) => instance.post(`/v1/device/user/login`, data)                     //用户登录
+export const login = (data) => instance.post(`/v1/device/sso/login`, data)                     //用户登录
 export const register = (data) => instance.post(`/v1/device/user/register`, data)               //用户注册
-export const loginOut = (data) => instance.post(`/v1/device/user/logout`, data)                 //用户注销
-export const updatedPwd = (data) => instance.post(`/v1/device/user/pwdModify`, data)            //修改密码
+export const logout = (data) => instance.post(`/v1/device/sso/logout`, data)                 //用户注销
+export const updatedPwd = (data) => instance.post(`/v1/device/sso/pwdModify`, data)            //修改密码
 
 //用户管理
 export const addUser = (data) => instance.post(`/v1/device/user/userAdd`, data)                 //新建用户
 export const getUserList = (data) => instance.post(`/v1/device/user/getUserList`, data)         //用户列表
-export const getUserInfo = (data) => instance.post(`/v1/device/user/userInfo`, data)            //用户信息详情
+export const getUserInfo = (data) => instance.post(`/v1/device/user/userInfoByUserId`, data)            //用户信息详情
 export const delUser = (data) => instance.post(`/v1/device/user/userDel`, data)                 //删除用户
 
 // 菜单管理
 export const addMenu = (data) => instance.post(`/v1/device/menu/save`, data)                    //菜单新增、修改
 export const getAllMenuList = (data) => instance.post(`/v1/device/menu/all`, data)              //所有菜单列表
 export const getMenuByUser = (data) => instance.post(`/bmSrv/v1/bm/menu/allByAuth`, data)       //菜单-查询用户-根据角色权限
-export const setMenuByUser = (data) => instance.post(`/bmSrv/v1/bm/roleMenu/batchSave`, data)   //菜单授权-角色授权-批量(菜单)修改
+export const setMenuByRoleId = (data) => instance.post(`/bmSrv/v1/bm/roleMenu/batchSave`, data)   //菜单授权-角色授权-批量(菜单)修改
 export const getMenuRoleId = (data) => instance.post(`/bmSrv/v1/bm/roleMenu/findMenuIdsByRoleId`, data)   //菜单授权-角色授权-批量(菜单)修改
 
 // 角色管理
@@ -82,9 +82,9 @@ export  const delWork = (data) => instance.post('/v1/device/work/workDel',data) 
 export  const setWorkStatus = (data) => instance.post('/v1/device/work/workAudit',data)         //修改工单审核状态
 
 //工单数据管理
-export  const getWorkDataList = (data) => instance.post('/v1/device/data/getDataList',data)      //获取工单数据列表
-export  const workDataAuth = (data) => instance.post('/v1/device/data/dataAudit',data)           //工单数据审核
-export  const getWorkDataInfo = (data) => instance.post('/v1/device/data/dataInfo',data)         //工单数据详情
+export  const getWorkDataList = (data) => instance.post('/v1/device/workData/getDataList',data)      //获取工单数据列表
+export  const workDataAuth = (data) => instance.post('/v1/device/workData/dataAudit',data)           //工单数据审核
+export  const getWorkDataInfo = (data) => instance.post('/v1/device/workData/dataInfo',data)         //工单数据详情
 
 //行政区管理
 export  const getRegionInfo = (data) => instance.get('/v1/region/regionInfo',data)                     //根据地区编码获取完整地区信息

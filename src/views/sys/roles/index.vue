@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-12 14:18:25
+ * @LastEditTime: 2020-09-18 14:42:53
 --> 
 <template>
     <div class="user-management">
@@ -17,21 +17,25 @@
                 <!-- 表格 -->
                 <el-table border  fit :data="RolList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
                     <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
-                    <el-table-column fixed label="角色编号" width="200" prop="roleId" align="center"></el-table-column>
+                    <!-- <el-table-column fixed label="角色编号" width="200" prop="roleId" align="center"></el-table-column> -->
                     <el-table-column fixed label="角色名称"  prop="roleName" align="center"></el-table-column>
                     <el-table-column fixed label="角色编码"  prop="roleCode" align="center"></el-table-column>
-                    <el-table-column fixed label="角色类型"  prop="roleType" align="center"></el-table-column>
-                    <el-table-column fixed label="操作人"  prop="updatedUser" align="center"></el-table-column>
+                    <el-table-column fixed label="角色类型"   align="center">
+                        <template slot-scope="scope">
+                            {{scope.row.roleType | formatType}}
+                        </template>
+                    </el-table-column>
+                    <!-- <el-table-column fixed label="操作人"  prop="updatedUser" align="center"></el-table-column>
                     <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column>
-                    <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column>
+                    <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column> -->
                     
                     <el-table-column fixed="left" label="操作" width="200" align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 
-                            <el-button size="mini" disabled @click.stop="handleDel(scope.row)">
-                                {{scope.row.status=='0'?'启用':'禁用'}}
+                            <el-button size="mini"  @click.stop="handleSelectMenu(scope.$index, scope.row)">
+                               分配菜单
                             </el-button> 
                         </template>
                     </el-table-column>
@@ -69,7 +73,7 @@ export default {
             pageNo:0,
             currentPage:1,
             totalNum:0,
-            RolList:[],          //分组列表
+            RolList:[],          //角色列表
             isLoading:true
         }
     },
@@ -79,36 +83,44 @@ export default {
     created(){
        this.fetchData();
     },
+    filters:{
+        formatType(type){
+            switch(type){
+                case '01':
+                    return '管理'
+                    break;
+                case '11':
+                    return '代理'
+                    break;
+                case '21':
+                    return '商家'
+                    break;
+                case '31':
+                    return '公众用户'
+                    break;
+            }
+        },
+        formatDateTime(time) {
+            if (time == null || time === '') {
+            return 'N/A';
+            }
+            let date = new Date(time);
+            return formatDate(date, 'yyyy-MM-dd hh:mm:ss')
+        }
+    },
     methods:{
     
         // 新增、编辑
         handleEdit(row) {
-            if (row.id) {
+            if (row.roleId) {
                 this.$refs["edit"].showEdit(row);    
             } else {
                 this.$refs["edit"].showEdit();
             }
         },
-        // 删除单位
-        async handleDel(row){
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示',{
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then( () => {
-                addRole({
-                    ids:[ row.id+'' ],               //单位id
-                    userId:'admin'                   //用户id
-                }).then( (res) =>　{
-                    if(res.retCode==="000000"){
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!' 
-                        });
-                        this.fetchData();     //刷新
-                    }
-                })  
-            })  
+        // 分配菜单
+        handleSelectMenu(index,row){
+            this.$router.push({path:'/sys/roles/allocMenu',query:{roleId:row.roleId}})
         },
      
         //当前页码发生变化时
@@ -125,7 +137,6 @@ export default {
         async fetchData(){
             this.isLoading = true;                        //显示Loading
             const res = await getAllRoleList({
-                status: '1',                              //  0：停用 1：正常
                 pageSize: this.pageSize,                  // 分页（每页个数）
                 pageNo: this.pageNo,                      // 当前页
                 order: ''                                 // 默认创建时间倒序排列

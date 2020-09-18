@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-12 14:33:52
+ * @LastEditTime: 2020-09-18 10:52:58
 -->
 <template>
   <el-dialog
@@ -51,7 +51,7 @@
 </template>
 
 <script>
-  import { addGroup } from "@/api/manage";
+  import { addRole } from "@/api/manage";
   import { mapState, mapActions } from 'vuex'
 
   export default {
@@ -98,6 +98,7 @@
    
         // 显示编辑弹框
         showEdit(row) {
+          console.log(row,555)
             if (!row) {
               this.title = "添加";
             } else {
@@ -118,7 +119,7 @@
             this.$refs["form"].validate(async (valid) => {
                 if (valid) {
                     this.form.userId = 'admin';                            //设置用户id
-                    const res = await addGroup(this.form);
+                    const res = await addRole(this.form);
                     if(!res) return;
                     this.$message({
                         message: '保存成功',

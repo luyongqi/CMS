@@ -2,10 +2,12 @@
  * @Author: 卢勇其
  * @Date: 2020-05-25 14:41:05
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-06 17:40:18
+ * @LastEditTime: 2020-09-18 10:34:05
  */ 
 import axios from 'axios';
 import { Message } from 'element-ui'
+import store from '../store'
+import { getToken,removeToken } from '@/utils/auth'
 
 // 全局设置
 const instance = axios.create({
@@ -19,11 +21,9 @@ const instance = axios.create({
 // request拦截器
 instance.interceptors.request.use(
   config => {
-    // 每次发送请求，检查 sessionStorage 中是否有 token,如果有放在headers中
-    const userInfo = JSON.parse(window.sessionStorage.getItem('userInfo')) || {};
-    const token =  userInfo.token || '';
-    if( token !== '' ){
-      config.headers.Authorization = token;
+    // 判断token是否有值
+    if( store.state.user.token){
+      config.headers['Authorization'] = 'bearer '+ getToken() // 让每个请求携带自定义token 请根据实际情况自行修改
     }
     return config;
   },
@@ -38,6 +38,9 @@ instance.interceptors.response.use(
     Message.closeAll(); //解决多次弹窗问题
     if(response.data.retCode==="000000"){  
        return response.data;  
+    }else if(response.data.retCode==="000401"){
+      removeToken()
+      window.location.href = "/login";
     }else{
       Message({
         message: response.data.errInfo,

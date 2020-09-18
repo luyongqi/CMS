@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-17 09:04:36
+ * @LastEditTime: 2020-08-27 09:49:59
 -->
 <template>
   <el-dialog
@@ -63,23 +63,23 @@
               show-word-limit
             ></el-input>
         </el-form-item>
-        <el-form-item label="审核人" prop="workAuditedUser" class="input-type">
-            <el-select v-model="form.workAuditedUser"  placeholder="请选择工单审核人">
+        <el-form-item label="审核人" prop="auditedUser" class="input-type">
+            <el-select v-model="form.auditedUser"  placeholder="请选择工单审核人">
               <el-option
                 v-for="item in staffList"
-                :key="item.workAuditedUser"
+                :key="item.auditedUser"
                 :label="item.userName"
-                :value="item.workAuditedUser"
+                :value="item.auditedUser"
               ></el-option>
             </el-select>
         </el-form-item>
-        <el-form-item label="批准人" prop="workApprovedUser" class="input-type">
-            <el-select v-model="form.workApprovedUser"  placeholder="请选择工单批准人">
+        <el-form-item label="批准人" prop="approvedUser" class="input-type">
+            <el-select v-model="form.approvedUser"  placeholder="请选择工单批准人">
               <el-option
                 v-for="item in staffList"
-                :key="item.workApprovedUser"
+                :key="item.approvedUser"
                 :label="item.userName"
-                :value="item.workApprovedUser"
+                :value="item.approvedUser"
               ></el-option>
             </el-select>
         </el-form-item>
@@ -106,8 +106,8 @@
           workUsers:[],           //工作组成员
           workNote:"",            //工作说明
           workDeviceIds:[],       //设备列表
-          workAuditedUser:'',     //审核人
-          workApprovedUser:''     //批准人 
+          auditedUser:'',         //审核人
+          approvedUser:''         //批准人 
         },                          
         devList:[],                //设备类型       
         staffList:[],              //员工列表
@@ -130,10 +130,10 @@
           workNote:[
             { required: true, message: '请输入工作说明', trigger: 'blur' }
           ],
-          workAuditedUser: [
+          auditedUser: [
             { required: true, trigger: "change", message: "请选择审核人" }, 
           ],
-          workApprovedUser: [
+          approvedUser: [
             { required: true, trigger: "change", message: "请选择批准人" }, 
           ],
         },
@@ -199,8 +199,8 @@
            this.staffList.forEach((item)=>{
              item.workUsers = item.userId
              item.workManager = item.userId
-             item.workAuditedUser = item.userId           //审核人
-             item.workApprovedUser = item.userId          //批准人
+             item.auditedUser = item.userId           //审核人
+             item.approvedUser = item.userId          //批准人
            })
         },
         // 获取设备列表

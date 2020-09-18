@@ -2,14 +2,14 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:27
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-14 14:55:14
+ * @LastEditTime: 2020-09-17 18:00:30
 --> 
 <template>
   <scroll-bar>
     <el-menu
       mode="vertical"
       :show-timeout="200"
-      :default-active="$route.name"
+      :default-active="$route.meta.index"
       :collapse="collapse"
       background-color="#304156"
       text-color="#bfcbd9"
@@ -17,7 +17,9 @@
       active-text-color="#409EFF"
     > 
       <!-- 导航菜单组件 动态组件 -->
-      <MenuTree v-for="(item) in sideMenuList.children" :menu="item" :key="item.name"></MenuTree>
+      <template v-if="sideMenuList.children&&sideMenuList.children.length>0">
+        <MenuTree v-for="(item) in sideMenuList.children" :menu="item" :key="item.menuId"></MenuTree>
+      </template>
     </el-menu>
   </scroll-bar>
 </template>
@@ -49,7 +51,7 @@ export default {
     }
   },
   created(){
-  
+   
   },
   methods:{
    

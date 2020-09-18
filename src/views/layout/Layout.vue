@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-10 09:54:12
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-14 17:46:54
+ * @LastEditTime: 2020-09-17 18:08:51
 --> 
 <template>
   <div class="app-wrapper" :class="classObj">
@@ -31,6 +31,7 @@ import { Navbar, Sidebar, AppMain, NavTop } from "./components";
 import ResizeMixin from "./mixin/ResizeHandler";
 import store from '@/store'
 import {mapState, mapMutations } from 'vuex'
+import { getNavBarList } from '@/utils/common'
 
 export default {
   name: "layout",
@@ -44,7 +45,8 @@ export default {
   computed: {
     ...mapState({
       withoutAnimation: state => state.app.withoutAnimation,
-      menuList: state => state.menu.menuList,
+      treeMenuList: state => state.menu.treeMenuList,
+      menuList:state => state.menu.menuList,
       collapse: state => state.app.collapse,
     }),
     
@@ -61,21 +63,33 @@ export default {
   },
   watch: {
     $route() {
-      this.setSideMenuList()
+      this.getBreadcrumb()
     },
+    menuList(newVal,oldVal){
+      this.getBreadcrumb()
+    }
   },
   created() {
-   this.setSideMenuList()
+    if(this.menuList.length>2){         //和watch配合同时使用，当  menuList 获取较慢时执行watch中的getBreadcrumb方法，反之执行create中的getBreadcrumb方法 
+      this.getBreadcrumb()
+    }
+   
   },
   methods:{
-    ...mapMutations(['SET_SIDE_LIST']),
+    ...mapMutations(['SET_SIDE_LIST','SET_NAV_LIST']),
+    // 设置当前路径页面navbar
+    getBreadcrumb(){ 
+      let arr = getNavBarList(this.menuList,this.$route.meta.index);
+      this.$store.commit('SET_NAV_LIST',arr)
+      this.setSideMenuList(arr[0].menuId)
+    },
     // 页面刷新时，根据顶部菜单路由的name设置侧边栏 
-    setSideMenuList(){     
-      let topName = this.$route.matched[0].name;   //当前顶部菜单的路由对应的name
+    setSideMenuList(menuId){     
       //根据name 筛选出侧边栏导航菜单
-      let sideMenuList = this.menuList.filter((item,index)=>{
-        return item.name == topName  
+      let sideMenuList = this.treeMenuList.filter((item,index)=>{
+        return item.menuId == menuId  
       })
+
       this.SET_SIDE_LIST(sideMenuList[0])  
     },
     
