@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-19 09:50:51
+ * @LastEditTime: 2020-09-19 17:41:36
 --> 
 <template>
     <div class="user-management">
@@ -49,10 +49,13 @@
                     
                     <el-table-column fixed="left" label="操作" width="200" align="center">
                         <template slot-scope="scope">
-                            <el-button size="mini" icon="el-icon-edit" @click.stop="handleEdit(scope.row)">
+                            <el-button size="mini" type="text"  @click.stop="handleSetting(scope.row)">
+                                设置账号密码
+                            </el-button> 
+                            <el-button size="mini" type="text"  @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 
-                            <el-button size="mini" icon="el-icon-delete" @click.stop="handleDel(scope.row)">
+                            <el-button size="mini" type="text" @click.stop="handleDel(scope.row)">
                                删除
                             </el-button> 
                         </template>
@@ -96,16 +99,20 @@
        
         <!-- 新增、编辑弹框 -->
         <edit ref="edit" @fetchData="fetchData"></edit>
-       
+        <!-- 设置账号密码弹框 -->
+        <user-edit ref="userEdit" @fetchData="fetchData"></user-edit>
     </div>
 </template>
 
 <script>
 import { getStaffList, getStaffInfo, delStaff } from '@/api/manage';
 import Edit from "./components/StfEdit";
+import UserEdit from "./components/UserEdit";
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
+
 export default {
-    components:{ Edit },
+    components:{ Edit,UserEdit },
     data(){
         return{  
             listQuery: {
@@ -152,6 +159,10 @@ export default {
             this.$refs["form"].resetFields();
             this.listQuery = this.$options.data().listQuery;
         },
+        // 设置账号密码
+        handleSetting(row){
+            this.$refs["userEdit"].showEdit(row);  
+        },
         // 新增、编辑
         handleEdit(row) {
             if (row.id) {
@@ -169,7 +180,7 @@ export default {
             }).then( () => {
                 delStaff({
                     ids:[ row.id+'' ],               //单位id
-                    userId:'admin'                   //用户id
+                    userId:getUserId()                   //用户id
                 }).then( (res) =>　{
                     if(res.retCode==="000000"){
                         this.$message({
@@ -214,7 +225,7 @@ export default {
                 case 'delete':
                     delStaff({
                         ids:ids,
-                        userId:'admin'
+                        userId:getUserId()
                     }).then( res => {
                         if(res.retCode==='000000'){
                             this.fetchData();

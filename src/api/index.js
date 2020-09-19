@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-05-25 14:41:05
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-18 10:34:05
+ * @LastEditTime: 2020-09-19 16:48:24
  */ 
 import axios from 'axios';
 import { Message } from 'element-ui'
@@ -35,18 +35,22 @@ instance.interceptors.request.use(
 // respone拦截器
 instance.interceptors.response.use(
   response => {
-    Message.closeAll(); //解决多次弹窗问题
+    // Message.closeAll(); //解决多次弹窗问题
     if(response.data.retCode==="000000"){  
        return response.data;  
     }else if(response.data.retCode==="000401"){
       removeToken()
+      Message({
+        message: response.data.errInfo,
+        type: 'error',
+        duration: 3000
+      })
       window.location.href = "/login";
     }else{
       Message({
         message: response.data.errInfo,
         type: 'error',
-        duration: 1.5 * 1000,
-        offset:150
+        duration: 3000
       })
     } 
   },

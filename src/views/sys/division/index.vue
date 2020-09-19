@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-19 10:15:54
+ * @LastEditTime: 2020-09-19 17:30:55
 --> 
 <template>
     <div class="user-management">
@@ -101,6 +101,7 @@
 import { getDeptList, getDeptInfo, delDept } from '@/api/manage';
 import Edit from "./components/DepEdit";
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
 export default {
     components:{ Edit },
     data(){
@@ -160,7 +161,7 @@ export default {
             }).then( () => {
                 delDept({
                     ids:[ row.id+'' ],               //单位id
-                    userId:'admin'                   //用户id
+                    userId:getUserId()                   //用户id
                 }).then( (res) =>　{
                     if(res.retCode==="000000"){
                         this.$message({
@@ -204,7 +205,7 @@ export default {
                     case 'delete':
                         delDept({
                             ids:ids,
-                            userId:'admin'
+                            userId:getUserId()
                         }).then( res => {
                             if(res.retCode==='000000'){
                                 this.fetchData();

@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-14 16:26:50
+ * @LastEditTime: 2020-09-19 17:29:22
 --> 
 <template>
     <div class="user-management">
@@ -60,6 +60,7 @@
 import { mapState, mapMutations } from 'vuex'
 import { getCompanyList,getCompanyDetail, delCompanyInfo } from '@/api/manage';
 import { treeCompany } from '@/utils/common'
+import { getUserId } from '@/utils/auth'
 import Edit from "./components/UntilEdit";
 export default {
     components:{ Edit },
@@ -116,7 +117,7 @@ export default {
             }).then( () => {
                 delCompanyInfo({
                     ids:[ row.id+'' ],               //单位id
-                    userId:'admin'                   //用户id
+                    userId:getUserId()                   //用户id
                 }).then( (res) =>　{
                     if(res.retCode==="000000"){
                         this.$message({

@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-18 11:40:03
+ * @LastEditTime: 2020-09-19 11:44:17
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -73,9 +73,6 @@ router.beforeEach((to, from, next)=>{
     if(to.path === '/login'){                //token未失效时 重定向到主页
       next({path:'/home'})
     }else{
-   
-      // addDynamicMenuAndRoutes( to,from,next )
-      // next()
       // 加载动态菜单和路由 
       if(store.state.user.roles.length===0){
         store.dispatch('GetInfo',{token}).then( res =>{   //拉取用户信息

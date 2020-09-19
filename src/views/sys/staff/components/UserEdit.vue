@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:43:16
+ * @LastEditTime: 2020-09-19 15:12:11
 -->
 <template>
   <el-dialog
@@ -12,7 +12,7 @@
     @close="close"
   >
     <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-      <el-form-item label="用户名" prop="username">
+      <el-form-item label="账号" prop="username">
         <el-input v-model.trim="form.username" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="password">
@@ -25,12 +25,6 @@
       <el-form-item label="邮箱" prop="email">
         <el-input v-model.trim="form.email" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="权限" prop="permissions">
-        <el-checkbox-group v-model="form.permissions">
-          <el-checkbox label="admin"></el-checkbox>
-          <el-checkbox label="editor"></el-checkbox>
-        </el-checkbox-group>
-      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>
@@ -41,17 +35,14 @@
 
 <script>
   import { addUser } from "@/api/manage";
-  import { getUserId } from '@/utils/auth'
-  
   export default {
-    name: "UserEdit",
+    name: "UserManagementEdit",
     data() {
       return {
         form: {
           username: "",
           password: "",
           email: "",
-          permissions: [],
         },
         rules: {
           username: [

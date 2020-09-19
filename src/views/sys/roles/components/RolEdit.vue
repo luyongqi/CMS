@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-18 10:52:58
+ * @LastEditTime: 2020-09-19 17:39:54
 -->
 <template>
   <el-dialog
@@ -53,6 +53,7 @@
 <script>
   import { addRole } from "@/api/manage";
   import { mapState, mapActions } from 'vuex'
+  import { getUserId } from '@/utils/auth'
 
   export default {
     name: "RolEdit",
@@ -118,7 +119,7 @@
         save() {
             this.$refs["form"].validate(async (valid) => {
                 if (valid) {
-                    this.form.userId = 'admin';                            //设置用户id
+                    this.form.userId = getUserId();                            //设置用户id
                     const res = await addRole(this.form);
                     if(!res) return;
                     this.$message({

@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-08 18:26:59
+ * @LastEditTime: 2020-09-19 17:31:43
 -->
 <template>
   <el-dialog
@@ -53,7 +53,7 @@
 <script>
   import { getDeptList, addDevice } from "@/api/manage";
   import { mapState, mapActions } from 'vuex'
-
+  import { getUserId } from '@/utils/auth'
   export default {
     name: "DepEdit",
     data() {
@@ -119,7 +119,7 @@
             console.log(this.form)
             this.$refs["form"].validate(async (valid) => {
                 if (valid) {
-                    this.form.userId = 'admin';                       //设置用户id
+                    this.form.userId = getUserId();                       //设置用户id
                     const res = await addDevice(this.form);
                     if(!res) return;
                     this.$message({

@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-10 15:49:15
+ * @LastEditTime: 2020-09-19 17:37:44
 --> 
 <template>
     <div class="user-management">
@@ -55,6 +55,8 @@
 <script>
 import { getWorkDataList,getWorkDataInfo } from '@/api/manage';
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
+
 export default {
     data(){
         return{
@@ -121,7 +123,7 @@ export default {
         //获取部门列表
         async fetchData(){
             this.isLoading = true;                        // 显示Loading
-            this.listQuery.userId = 'admin';              // 用户id
+            this.listQuery.userId = getUserId();              // 用户id
             const res = await getWorkDataList(this.listQuery)
            
             this.totalNum = res.data.totalNum;             //总条数

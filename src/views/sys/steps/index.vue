@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-19 10:17:09
+ * @LastEditTime: 2020-09-19 17:42:31
 --> 
 <template>
     <div class="user-management">
@@ -108,6 +108,7 @@
 import { getStepList, getStepInfo, delStep } from '@/api/manage';
 import Edit from "./components/StaEdit";
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
 export default {
     components:{ Edit },
     data(){
@@ -173,7 +174,7 @@ export default {
             }).then( () => {
                 delStep({
                     ids:[ row.id+'' ],               //单位id
-                    userId:'admin'                   //用户id
+                    userId:getUserId()                   //用户id
                 }).then( (res) =>　{
                     if(res.retCode==="000000"){
                         this.$message({
@@ -217,7 +218,7 @@ export default {
                     case 'delete':
                         delStep({
                             ids:ids,
-                            userId:'admin'
+                            userId:getUserId()
                         }).then( res => {
                             if(res.retCode==='000000'){
                                 this.fetchData();

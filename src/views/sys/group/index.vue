@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-19 10:13:24
+ * @LastEditTime: 2020-09-19 17:34:03
 --> 
 <template>
     <div class="user-management">
@@ -96,6 +96,8 @@
 import { getGroupList, getGroupInfo, delGroup } from '@/api/manage';
 import Edit from "./components/GroEdit";
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
+
 export default {
     components:{ Edit },
     data(){
@@ -159,7 +161,7 @@ export default {
             }).then( () => {
                 delGroup({
                     ids:[ row.id+'' ],               //单位id
-                    userId:'admin'                   //用户id
+                    userId:getUserId()                  //用户id
                 }).then( (res) =>　{
                     if(res.retCode==="000000"){
                         this.$message({
@@ -203,7 +205,7 @@ export default {
                     case 'delete':
                         delGroup({
                             ids:ids,
-                            userId:'admin'
+                            userId:getUserId()
                         }).then( res => {
                             if(res.retCode==='000000'){
                                 this.fetchData();

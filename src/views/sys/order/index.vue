@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-20 17:54:03
+ * @LastEditTime: 2020-09-19 17:36:12
 --> 
 <template>
     <div class="user-management">
@@ -112,6 +112,7 @@
 import { getWorkList, getWorkInfo, delWork } from '@/api/manage';
 import Edit from "./components/OrdEdit";
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
 export default {
     components:{ Edit },
     data(){
@@ -189,7 +190,7 @@ export default {
         async handleDel(row){
             const res = await delWork({
                 ids:[row.id+''],
-                userId:'admin'
+                userId:getUserId()
             })
             if(res.retCode === '000000'){
                 this.fetchData();
@@ -232,7 +233,7 @@ export default {
                 case 'delete':
                     delWork({
                         ids:ids,
-                        userId:'admin'
+                        userId:getUserId()
                     }).then( res => {
                         if(res.retCode==='000000'){
                             this.fetchData();

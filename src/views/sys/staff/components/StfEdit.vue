@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-11 15:26:40
+ * @LastEditTime: 2020-09-19 17:41:00
 -->
 <template>
   <el-dialog
@@ -63,6 +63,7 @@
 <script>
   import { getDeptList, getGroupList, addStaff } from "@/api/manage";
   import { mapState, mapActions } from 'vuex'
+  import { getUserId } from '@/utils/auth'
 
   export default {
     name: "StfEdit",
@@ -144,7 +145,7 @@
         save() {
             this.$refs["form"].validate(async (valid) => {
                 if (valid) {
-                    this.form.opUserId = 'admin';                       //设置操作人id
+                    this.form.opUserId = getUserId();                       //设置操作人id
                     const res = await addStaff(this.form);
                     if(!res) return;
                     this.$message({

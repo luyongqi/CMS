@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-27 09:49:59
+ * @LastEditTime: 2020-09-19 17:35:29
 -->
 <template>
   <el-dialog
@@ -94,6 +94,7 @@
 <script>
   import { getStaffList, getDeviceList, addWorkOrder } from "@/api/manage";
   import { mapState, mapActions } from 'vuex'
+  import { getUserId } from '@/utils/auth'
 
   export default {
     name: "DepEdit",
@@ -219,7 +220,7 @@
         // 保存数据
         save() {
           this.$refs["form"].validate(async (valid) => {
-              this.form.userId = 'admin';                            //设置用户id  
+              this.form.userId = getUserId();                            //设置用户id  
               if (valid) {
                   const res = await addWorkOrder(this.form);
                   if(!res) return;

@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-19 10:24:58
+ * @LastEditTime: 2020-09-19 17:32:18
 --> 
 <template>
     <div class="user-management">
@@ -103,6 +103,7 @@
 import { getDeviceList, getDeviceInfo, delDevice } from '@/api/manage';
 import Edit from "./components/FacEdit";
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
 export default {
     components:{ Edit },
     data(){
@@ -162,7 +163,7 @@ export default {
             }).then( () => {
                 delDevice({
                     ids:[ row.id+'' ],               //单位id
-                    userId:'admin'                   //用户id
+                    userId:getUserId()                  //用户id
                 }).then( (res) =>　{
                     if(res.retCode==="000000"){
                         this.$message({
@@ -206,7 +207,7 @@ export default {
                     case 'delete':
                         delDevice({
                             ids:ids,
-                            userId:'admin'
+                            userId:getUserId()
                         }).then( res => {
                             if(res.retCode==='000000'){
                                 this.fetchData();

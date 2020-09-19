@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-13 17:53:23
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-10 18:01:33
+ * @LastEditTime: 2020-09-19 17:37:17
 -->
 <template>
     <div class="detail-container">
@@ -130,6 +130,7 @@
 <script>
 import { getWorkDataInfo, setWorkStatus } from '@/api/manage';
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
 const defaultWorkApply = {       //工单详细信息
     auditedAt: null,             //一次审核时间
     auditedNote: null,           //一次审核处理备注
@@ -215,7 +216,7 @@ export default {
         handleUpdateStatus(status){
             this.updateStatusParam.status=status;
             this.updateStatusParam.id = this.id
-             this.updateStatusParam.userId = 'admin'          //审核人
+             this.updateStatusParam.userId = getUserId()          //审核人
             if((status==='2'||status==='4')&&(this.updateStatusParam.reason===null||this.updateStatusParam.reason==='')){
                 this.$message({
                     message: '请填写拒绝审核的处理备注！',

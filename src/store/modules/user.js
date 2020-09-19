@@ -2,10 +2,10 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:52:31
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-18 16:00:29
+ * @LastEditTime: 2020-09-19 17:23:12
  */ 
 import { login, logout, getUserInfo } from '@/api/manage'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth'
 import md5 from 'js-md5';
 
 const user = {
@@ -41,8 +41,10 @@ const user = {
           service:'adminSys',
         }).then(response => {
           const tokenStr = response.data.token;
+          const userId = response.data.userInfo.userId
           setToken(tokenStr)                                 //本地缓存token
-          sessionStorage.setItem("userId", response.data.userInfo.userId);   //本地保存用户id
+          setUserId(userId)
+          // sessionStorage.setItem("userId", response.data.userInfo.userId);   //本地保存用户id
           commit('SET_TOKEN', tokenStr)
           resolve()
         }).catch(error => {
@@ -54,7 +56,8 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        let userId = sessionStorage.getItem("userId")
+        // let userId = sessionStorage.getItem("userId")
+        let userId = getUserId();              //cookie中获取userId
         getUserInfo({userId}).then(response => {
           const data = response.data
           // if (data.roles && data.roles.length > 0) {    // 验证返回的roles是否是一个非空数组
