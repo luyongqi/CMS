@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:42:31
+ * @LastEditTime: 2020-09-28 10:04:21
 --> 
 <template>
     <div class="user-management">
@@ -43,7 +43,6 @@
                         </template>
                     </el-table-column>
                     <el-table-column fixed label="操作人"  prop="updatedUser"  align="center"></el-table-column>
-                    <el-table-column fixed label="步骤内容"  prop="stepContent"  align="center"></el-table-column>
                     <!-- <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column> -->
                     <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column>
                     <el-table-column fixed="left" label="状态"  align="center">

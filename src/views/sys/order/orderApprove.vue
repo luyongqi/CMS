@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-28 10:19:44
+ * @LastEditTime: 2020-09-28 10:20:01
 --> 
 <template>
     <div class="user-management">
@@ -10,7 +10,7 @@
         <el-card class="operate-container" shadow="never" >
             <div slot="header">
                 <i class="iconfont iconjiaoseguanli2"></i>
-                <span>工单审核列表</span>
+                <span>工单审批列表</span>
             </div>
             <div>
                 <!-- 表格 -->
@@ -108,7 +108,7 @@ export default {
         async fetchData(){
             this.isLoading = true;                        //显示Loading
             const res = await getWorkList({
-                status: '0',                               //  审核状态( 0 未审核 1 审核通过 2拒绝 3二级审核通过 4 二级审核拒绝 )
+                status: '1',                               //  审核状态( 0 未审核 1 审核通过 2拒绝 3二级审核通过 4 二级审核拒绝 )
                 pageSize: this.pageSize,                  // 分页（每页个数）
                 pageNo: this.pageNo,                      // 当前页
                 order: ''                                 // 默认创建时间倒序排列

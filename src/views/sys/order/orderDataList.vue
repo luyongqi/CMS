@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:37:44
+ * @LastEditTime: 2020-09-28 10:29:50
 --> 
 <template>
     <div class="user-management">
@@ -19,16 +19,17 @@
                     <el-table-column fixed label="工单编号"  prop="workId" align="center"></el-table-column>
                     <el-table-column fixed label="工单名称"  prop="workName" align="center"></el-table-column>
                     <el-table-column fixed label="工单负责人"  prop="workManagerName" align="center"></el-table-column>
-                    <el-table-column fixed="left" label="审核状态"  align="center">
+                    <el-table-column fixed label="工作成员"  prop="workUserNames" align="center"></el-table-column>
+                    <el-table-column fixed="left" label="数据审核状态"  align="center">
                         <template slot-scope="scope">
-                            <p>{{scope.row.status | verifyStatusFilter}}</p>
+                            <p>{{scope.row.dataStatus | verifyStatusFilter}}</p>
                         </template>
                     </el-table-column>
                      <el-table-column fixed label="申请时间"  prop="updatedAt" align="center"></el-table-column>
-                     <el-table-column fixed label="处理时间"  prop="auditedAt" align="center"></el-table-column>
+                     <!-- <el-table-column fixed label="处理时间"  prop="auditedAt" align="center"></el-table-column> -->
                     <el-table-column fixed="left" label="操作"  align="center">
                         <template slot-scope="scope">
-                            <el-button size="mini" @click.stop="navToDetail(scope.row)">
+                            <el-button size="mini" :disabled="scope.row.dataStatus==''" @click.stop="navToDetail(scope.row)">
                                 查看详情
                             </el-button>  
                         </template>
@@ -62,9 +63,9 @@ export default {
         return{
             listQuery: {
                 type: '',                                 // 用户类型（2.工单数据审批者 3，工单数据批准者 缺省查看所有数据）
-                dataStatus:'0',                           //工单数据审核状态( 0待审 1 审核通过 2拒绝 3二级审核通过 4 二级审核拒绝 8部分数据上传)
-                pageSize: 10,                  // 分页（每页个数）
-                pageNo: 0,                      // 当前页
+                dataStatus:'',                            //工单数据审核状态( 0待审 1 审核通过 2拒绝 3二级审核通过 4 二级审核拒绝 8部分数据上传)
+                pageSize: 10,                             // 分页（每页个数）
+                pageNo: 0,                                // 当前页
                 order: ''                                 // 默认创建时间倒序排列
             },
             currentPage:1,
@@ -88,6 +89,8 @@ export default {
           return '二审通过';
         } else if(value === '4'){
           return '二审未通过';
+        }else{
+            return 'N/A'
         }
       }
     },

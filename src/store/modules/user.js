@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:52:31
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:23:12
+ * @LastEditTime: 2020-09-21 09:49:25
  */ 
 import { login, logout, getUserInfo } from '@/api/manage'
 import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth'
@@ -79,6 +79,7 @@ const user = {
         logout({}).then((res) => {
           commit('SET_TOKEN', '')
           commit('SET_ROLES', [])
+          commit('SET_ROUTE_LOAD_STATUS',false)
           removeToken()
           resolve(res)
         }).catch(error => {
@@ -90,6 +91,7 @@ const user = {
     FedLogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '')
+        commit('SET_ROUTE_LOAD_STATUS',false)
         removeToken()
         resolve()
       })

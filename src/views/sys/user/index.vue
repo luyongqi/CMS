@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:43:52
+ * @LastEditTime: 2020-09-24 18:51:04
 --> 
 <template>
     <div class="user-management">
@@ -30,27 +30,30 @@
                 <el-table border  fit :data="staffList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
                     <el-table-column fixed type="selection" width="60" align="center"></el-table-column>
                     <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
-                    <el-table-column fixed label="员工编号"  prop="userId" align="center"></el-table-column>
-                    <el-table-column fixed label="员工姓名"  prop="userName" align="center"></el-table-column>
-                    <el-table-column fixed="left" label="性别"  align="center">
+                    <el-table-column fixed label="用户编号"  prop="userId" align="center"></el-table-column>
+                    <el-table-column fixed label="登录账号"  prop="loginName" align="center"></el-table-column>
+                    <!-- <el-table-column fixed="left" label="性别"  align="center">
                         <template slot-scope="scope">
                             <div>{{scope.row.sex=='0'?'男':'女'}}</div>
                         </template>
                     </el-table-column>
                     <el-table-column fixed label="职务"  prop="jobName"  align="center"></el-table-column>
                     <el-table-column fixed label="所在部门"  prop="deptName"  align="center"></el-table-column>
-                    <el-table-column fixed label="所在分组"  prop="groupName"  align="center"></el-table-column>
+                    <el-table-column fixed label="所在分组"  prop="groupName"  align="center"></el-table-column> -->
                     <el-table-column fixed label="创建时间"  align="center">
                         <template slot-scope="scope">{{scope.row.createdAt | formatCreateTime}}</template>
                     </el-table-column>
-                    <el-table-column fixed label="更新时间" align="center">
+                    <!-- <el-table-column fixed label="更新时间" align="center">
                         <template slot-scope="scope">{{scope.row.updatedAt | formatCreateTime}}</template>
-                    </el-table-column>
+                    </el-table-column> -->
                     
                     <el-table-column fixed="left" label="操作" width="200" align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" type="text"  @click.stop="handleSetting(scope.row)">
                                分配角色
+                            </el-button> 
+                            <el-button size="mini" type="text"  @click.stop="handleReset(scope.row)">
+                               重置密码
                             </el-button> 
                             <!-- <el-button size="mini" type="text"  @click.stop="handleEdit(scope.row)">
                                编辑
@@ -107,7 +110,7 @@
 </template>
 
 <script>
-import { getStaffList, getStaffInfo, delStaff } from '@/api/manage';
+import { getUserList, getStaffList, getStaffInfo, delStaff, updatedPwd } from '@/api/manage';
 import UserEdit from "./components/UserEdit";
 import UserRoleEdit from "./components/UserRoleEdit";
 import { formatDate } from '@/utils/date'
@@ -168,6 +171,21 @@ export default {
             } else {
                 this.$refs["userRoleEdit"].showEdit();
             }
+        },
+        // 重置密码
+        handleReset(row){
+            updatedPwd({
+                userId:row.userId,               //要重置的用户id
+                opUserId:getUserId()             //操作人id
+            }).then((res) => {
+                if(res.retCode==="000000"){
+                    this.$message({
+                        type: 'success',
+                        message: '密码重置成功!',
+                            duration: 3000 
+                    });
+                }
+            })
         },
         // 编辑
         handleEdit(row){
@@ -266,7 +284,7 @@ export default {
         //获取人员列表
         async fetchData(){
             this.isLoading = true;                          //显示Loading
-            const res = await getStaffList(this.listQuery)
+            const res = await getUserList(this.listQuery)
             this.totalNum = res.data.totalNum;             //总条数
             this.staffList =  res.data.list;               //员工列表                   
             this.isLoading = false;                        //隐藏loading

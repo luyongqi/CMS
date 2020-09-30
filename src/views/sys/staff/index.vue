@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:41:36
+ * @LastEditTime: 2020-09-24 09:52:44
 --> 
 <template>
     <div class="user-management">
@@ -49,9 +49,9 @@
                     
                     <el-table-column fixed="left" label="操作" width="200" align="center">
                         <template slot-scope="scope">
-                            <el-button size="mini" type="text"  @click.stop="handleSetting(scope.row)">
+                            <!-- <el-button size="mini" type="text"  @click.stop="handleSetting(scope.row)">
                                 设置账号密码
-                            </el-button> 
+                            </el-button>  -->
                             <el-button size="mini" type="text"  @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 

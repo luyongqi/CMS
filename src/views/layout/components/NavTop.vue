@@ -208,7 +208,7 @@ export default {
         .avatar-container {
           height: 60px;
           line-height: 60px;
-          .el-dropdown-link {
+          /deep/ .el-dropdown-link {
             cursor: pointer;
             height: 60px;
             position: relative;

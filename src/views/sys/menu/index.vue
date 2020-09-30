@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:34:58
+ * @LastEditTime: 2020-09-28 09:35:05
 --> 
 <template>
     <div class="user-management">
@@ -55,7 +55,8 @@ export default {
             pageNo:0,
             currentPage:1,
             totalNum:0,
-            isLoading:true
+            isLoading:true,
+            allMenuList:[]        //当前显示的菜单
         }
     },
     computed:{
@@ -66,13 +67,13 @@ export default {
         options(){
             if(this.menuList.length>0){
                 //任何用到此数据的地方都需要判断 因为此数据是异步获取的
-                let list=JSON.parse(JSON.stringify(this.menuList))
+                let list=JSON.parse(JSON.stringify(this.allMenuList))
                 list.forEach(item => {
                     item.value=item.menuId;      //适配value值;
                     item.label=item.menuName;    //适配label值;
                 });
                 list = treeList(list) //递归排序算法
-                this.SET_TREE_MENU(list)
+                // this.SET_TREE_MENU(list)
                 return list
             }
         }
@@ -133,8 +134,8 @@ export default {
             this.totalNum = res.data.totalNum;                //总条数
 
             this.SET_SELECT_TREE_MENU(selectMenuList)         //保存选择菜单
-            this.SET_All_MENU(res.data)                      //保存所有菜单
-
+            // this.SET_All_MENU(res.data)                      //保存所有菜单
+            this.allMenuList = res.data
             this.isLoading = false;                           //隐藏loading
         }, 
        

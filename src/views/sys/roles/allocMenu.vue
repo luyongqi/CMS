@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-09-18 11:22:15
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:40:29
+ * @LastEditTime: 2020-09-21 10:04:58
 -->
 <template>
   <el-card class="form-container" shadow="never">
@@ -37,8 +37,9 @@
 </template>
 
 <script>
-  import {getAllMenuList,getMenuRoleId,setMenuByRoleId} from '@/api/manage';
-  import {treeList} from '@/utils/common'
+  import { mapMutations } from 'vuex'
+  import { getAllMenuList,getMenuRoleId,setMenuByRoleId } from '@/api/manage';
+  import { treeList } from '@/utils/common'
   import { getUserId } from '@/utils/auth'
   
   export default {
@@ -66,7 +67,6 @@
       this.handleRoleSelectChange(this.roleId)
     },
     methods: {
-
       // 获取所有菜单数据
       findTreeData: function () {
           this.menuLoading = true
@@ -143,6 +143,7 @@
       },
       // 角色菜单授权提交
       submitAuthForm() {
+          let that = this
           let roleId = this.roleId;
           // if('admin' == this.selectRole.name) {
           //     this.$message({message: '超级管理员拥有所有菜单权限，不允许修改！', type: 'error'})
@@ -161,12 +162,18 @@
               roleId,
               menuIds:roleMenuIds
           }).then(res=>{
-              if(res.retCode=="000000"){
-                  this.$message({ message:'角色授权成功',type:'success',duration:3000})
-              }else{
-                  this.$message({ message:'角色授权失败',type:'error',duration:3000})
-              }
-              this.authLoading = false 
+                if(res.retCode=="000000"){
+                    this.$confirm('菜单分配成功，确定刷新页面重新加载菜单吗?', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                    }).then(() => {
+                        window.location.reload()      //重新加载页面
+                    })
+                }else{
+                    this.$message({ message:'角色授权失败',type:'error',duration:3000})
+                }
+                this.authLoading = false 
           })
       },
           

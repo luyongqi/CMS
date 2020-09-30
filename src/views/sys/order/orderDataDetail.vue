@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-13 17:53:23
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:37:17
+ * @LastEditTime: 2020-09-24 09:40:30
 -->
 <template>
     <div class="detail-container">
@@ -52,7 +52,7 @@
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">审核状态</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.status | formatStatus}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataStatus | formatStatus}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">申请时间</el-col>
@@ -64,10 +64,10 @@
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workManagerName}}</el-col>
                 </el-row>
                
-                <el-row>
+                <!-- <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">工作组成员</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workUserNames}}</el-col>
-                </el-row>
+                </el-row> -->
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">工单说明</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workNote}}</el-col>
@@ -75,38 +75,38 @@
                  
             </div>
             <!-- 处理信息  待审核时不展示-->
-             <div class="form-container-border" v-show="orderReturnApply.status!=='0'">
+             <div class="form-container-border" v-show="orderReturnApply.dataStatus!=='0'">
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理人员</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.auditedUser}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataAuditedUserName}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理时间</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.auditedAt | formatTime}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataAuditedAt | formatTime}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理备注</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.auditedNote}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataAuditedNote}}</el-col>
                 </el-row>
             </div>
 
-            <div class="form-container-border" v-show="orderReturnApply.status>2">
+            <div class="form-container-border" v-show="orderReturnApply.dataStatus>2">
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理人员</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.approvedUser}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataApprovedUserName}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理时间</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.approvedAt | formatTime}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataApprovedAt | formatTime}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理备注</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.approvedNote}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataApprovedNote}}</el-col>
                 </el-row>
             </div>
 
             <!-- 处理备注 -->
-            <div class="form-container-border" v-show="orderReturnApply.status==='0'||orderReturnApply.status==='1'">
+            <div class="form-container-border" v-show="orderReturnApply.dataStatus==='0'||orderReturnApply.dataStatus==='1'">
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6" style="height:71px;line-height:51px">处理备注</el-col>
                     <el-col class="form-border font-small" :span="18">
@@ -115,12 +115,12 @@
                 </el-row>
             </div>
             <!-- 工单审核 -->
-            <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.status==='0'">
+            <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.dataStatus==='0'">
                 <el-button type="primary" size="small" @click="handleUpdateStatus('1')">确认审核</el-button>
                 <el-button type="danger" size="small" @click="handleUpdateStatus('2')">拒绝审核</el-button>
             </div>
             <!-- 二次审核 -->
-            <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.status==='1'">
+            <div style="margin-top:15px;text-align: center" v-show="orderReturnApply.dataStatus==='1'">
                 <el-button type="primary" size="small" @click="handleUpdateStatus('3')">确认审核</el-button>
                 <el-button type="danger" size="small" @click="handleUpdateStatus('4')">拒绝审核</el-button>
             </div>
@@ -128,28 +128,22 @@
     </div>
 </template>
 <script>
-import { getWorkDataInfo, setWorkStatus } from '@/api/manage';
+import { getWorkDataInfo, setWorkDataAuth } from '@/api/manage';
 import { formatDate } from '@/utils/date'
 import { getUserId } from '@/utils/auth'
 const defaultWorkApply = {       //工单详细信息
-    auditedAt: null,             //一次审核时间
-    auditedNote: null,           //一次审核处理备注
-    auditedUser: null,           //审核人
-    createdAt: null,             //工单创建时间
-    createdUser: null,           //工单创建人
     id: null,                    //服务id
-    status: null,                //审核状态 0-待审核 1-通过 2-未通过 3-待二次审
-    updatedAt: null,             //工单修改时间
-    updatedUser: null,           //修改人
-    workDeviceIds:null,          //工作设备id 
-    workDeviceNames: null,       //工作设备名称
     workId: null,                //工单id 
-    workManager: null,           //工单负责人id
-    workManagerName: null,       //负责人名称
     workName: null,              //工单名称
-    workNote: null,              //工单说明
-    workUserNames: null,         //工作组成员名称
-    workUsers: null              //工作组成员id
+    workManagerName: null,       //负责人名称
+    dataAuditedUserName:null,    //工单数据审核人
+    dataAuditedNote:null,        //审核备注
+    dataAuditedAt:null,          //审核时间
+    dataApprovedUserName:null,   //批准人
+    dataApprovedNote:null,       //批准人备注
+    dataApprovedAt:null,         //批准时间
+    workNote:null,                //工单说明
+    dataStatus:null               //工单数据状态
 };
   const defaultUpdateStatusParam = {       //审核信息
     id:'',                         //工单id
@@ -202,7 +196,6 @@ export default {
             const res = await getWorkDataInfo({ id })
             if(res.retCode === '000000'){
                 this.orderReturnApply = res.data.detail
-                this.orderReturnApply.workUserNames = this.orderReturnApply.workUserNames.replace(/;/g,"、")
                 this.devList = res.data.detail.workDeviceIds      //该工单设备列表
             }else{
                 this.$message({
@@ -230,7 +223,7 @@ export default {
                 cancelButtonText: '取消',
                 type: 'warning'
             }).then(() => {
-                setWorkStatus(this.updateStatusParam).then(response=>{
+                setWorkDataAuth(this.updateStatusParam).then(response=>{
                     if(response.retCode==="000000"){    
                         this.$message({
                             type:'success',

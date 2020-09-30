@@ -2,14 +2,14 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 11:44:17
+ * @LastEditTime: 2020-09-21 09:13:16
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
 import Layout from '../views/layout/Layout'
 import store from '@/store'
-import { getToken,removeToken } from '@/utils/auth'
-import { getAllMenuList } from '@/api/manage';
+import { getToken,removeToken,getUserId } from '@/utils/auth'
+import { getAllMenuList,getMenuByUser } from '@/api/manage';
 import { treeList } from '@/utils/common'
 
 const originalPush = Router.prototype.push
@@ -125,7 +125,9 @@ function addDynamicMenuAndRoutes(to,from) {
     return
   }
   
-  getAllMenuList().then(res => {             //获取所有菜单
+  getMenuByUser({
+    userId:getUserId()
+  }).then(res => {             //获取所有菜单
 
     // 添加动态路由
     let dynamicRoutes = addDynamicRoutes(treeList(res.data))

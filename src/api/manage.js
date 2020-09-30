@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 16:13:30
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 16:16:59
+ * @LastEditTime: 2020-09-24 18:45:32
  */ 
 import instance  from './index.js'
 let prefix = ''                       //url 前缀
@@ -11,14 +11,15 @@ let prefix = ''                       //url 前缀
 export const login = (data) => instance.post(`${prefix}/v1/device/sso/login`, data)                     //用户登录
 export const register = (data) => instance.post(`${prefix}/v1/device/user/register`, data)              //用户注册
 export const logout = (data) => instance.post(`${prefix}/v1/device/sso/logout`, data)                   //用户注销
-export const updatedPwd = (data) => instance.post(`${prefix}/v1/device/sso/pwdModify`, data)            //修改密码
+export const updatedPwd = (data) => instance.post(`${prefix}/v1/device/sso/pwdUpdate`, data)            //重置密码
 
 //用户管理
 export const addUser = (data) => instance.post(`${prefix}/v1/device/user/userAdd`, data)                 //新建用户
-export const getUserList = (data) => instance.post(`${prefix}/v1/device/user/getUserList`, data)         //用户列表
+export const getUserList = (data) => instance.post(`${prefix}/v1/device/sso/getUserList`, data)         //用户列表
 export const getUserInfo = (data) => instance.post(`${prefix}/v1/device/user/userInfoByUserId`, data)    //用户信息详情
 export const delUser = (data) => instance.post(`${prefix}/v1/device/user/userDel`, data)                 //删除用户
 export const allocUserRole = (data) => instance.post(`${prefix}/v1/device/userRole/save`, data)          //授权用户角色
+
 // 菜单管理
 export const addMenu = (data) => instance.post(`${prefix}/v1/device/menu/save`, data)                    //菜单新增、修改
 export const getAllMenuList = (data) => instance.post(`${prefix}/v1/device/menu/all`, data)              //所有菜单列表
@@ -84,7 +85,7 @@ export  const setWorkStatus = (data) => instance.post(`${prefix}/v1/device/work/
 
 //工单数据管理
 export  const getWorkDataList = (data) => instance.post(`${prefix}/v1/device/workData/getDataList`,data)      //获取工单数据列表
-export  const workDataAuth = (data) => instance.post(`${prefix}/v1/device/workData/dataAudit`,data)           //工单数据审核
+export  const setWorkDataAuth = (data) => instance.post(`${prefix}/v1/device/workData/dataAudit`,data)           //工单数据审核
 export  const getWorkDataInfo = (data) => instance.post(`${prefix}/v1/device/workData/dataInfo`,data)         //工单数据详情
 
 //行政区管理

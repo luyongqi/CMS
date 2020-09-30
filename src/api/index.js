@@ -2,12 +2,12 @@
  * @Author: 卢勇其
  * @Date: 2020-05-25 14:41:05
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 16:48:24
+ * @LastEditTime: 2020-09-21 09:07:19
  */ 
 import axios from 'axios';
 import { Message } from 'element-ui'
 import store from '../store'
-import { getToken,removeToken } from '@/utils/auth'
+import { getToken,removeToken,removesetUserId } from '@/utils/auth'
 
 // 全局设置
 const instance = axios.create({
@@ -58,7 +58,7 @@ instance.interceptors.response.use(
     let { response } = error;
     if(response&&response.status === 401) {
       // 清除缓存
-      window.sessionStorage.removeItem('userInfo');
+      removesetUserId()                   //移除cookie中的userId
       window.location.href = "/login";
       return Promise.reject(error.response);
     }else{

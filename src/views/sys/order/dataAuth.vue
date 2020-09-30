@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-28 10:19:44
+ * @LastEditTime: 2020-09-28 10:20:14
 --> 
 <template>
     <div class="user-management">
@@ -10,7 +10,7 @@
         <el-card class="operate-container" shadow="never" >
             <div slot="header">
                 <i class="iconfont iconjiaoseguanli2"></i>
-                <span>工单审核列表</span>
+                <span>数据审核列表</span>
             </div>
             <div>
                 <!-- 表格 -->
@@ -19,13 +19,14 @@
                     <el-table-column fixed label="工单编号"  prop="workId" align="center"></el-table-column>
                     <el-table-column fixed label="工单名称"  prop="workName" align="center"></el-table-column>
                     <el-table-column fixed label="工单负责人"  prop="workManagerName" align="center"></el-table-column>
-                    <el-table-column fixed="left" label="审核状态"  align="center">
+                    <el-table-column fixed label="工作成员"  prop="workUserNames" align="center"></el-table-column>
+                    <el-table-column fixed="left" label="数据审核状态"  align="center">
                         <template slot-scope="scope">
-                            <p>{{scope.row.status | verifyStatusFilter}}</p>
+                            <p>{{scope.row.dataStatus | verifyStatusFilter}}</p>
                         </template>
                     </el-table-column>
                      <el-table-column fixed label="申请时间"  prop="updatedAt" align="center"></el-table-column>
-                     <el-table-column fixed label="处理时间"  prop="auditedAt" align="center"></el-table-column>
+                     <!-- <el-table-column fixed label="处理时间"  prop="auditedAt" align="center"></el-table-column> -->
                     <el-table-column fixed="left" label="操作"  align="center">
                         <template slot-scope="scope">
                             <el-button size="mini" @click.stop="navToDetail(scope.row)">
@@ -48,18 +49,25 @@
                 </div>
             </div>
         </el-card>
-       
+    
     </div>
 </template>
 
 <script>
-import { getWorkList, getWorkInfo, delWork } from '@/api/manage';
+import { getWorkDataList,getWorkDataInfo } from '@/api/manage';
 import { formatDate } from '@/utils/date'
+import { getUserId } from '@/utils/auth'
+
 export default {
     data(){
         return{
-            pageSize:10,
-            pageNo:0,
+            listQuery: {
+                type: '',                                 // 用户类型（2.工单数据审批者 3，工单数据批准者 缺省查看所有数据）
+                dataStatus:'0',                            //工单数据审核状态( 0待审 1 审核通过 2拒绝 3二级审核通过 4 二级审核拒绝 8部分数据上传)
+                pageSize: 10,                             // 分页（每页个数）
+                pageNo: 0,                                // 当前页
+                order: ''                                 // 默认创建时间倒序排列
+            },
             currentPage:1,
             totalNum:0,
             orderList:[],                     //工单列表
@@ -78,9 +86,9 @@ export default {
         } else if(value === '2'){
           return '一审未通过';
         } else if(value === '3'){
-          return '审核通过';
+          return '二审通过';
         } else if(value === '4'){
-          return '审核未通过';
+          return '二审未通过';
         }
       }
     },
@@ -89,32 +97,37 @@ export default {
     },
    
     methods:{
-      
+         // 搜索
+        handleSearch() {
+            this.listQuery.pageNo = 0
+            this.fetchData();
+        },
+        // 重置搜索条件
+        handleReset(){
+            this.$refs["form"].resetFields();
+            this.listQuery = this.$options.data().listQuery;
+        },
         // 跳转至详情页
         navToDetail(row){
-            this.$router.push({ path:'/sys/orderDetail', query:{id:row.id} })
+            this.$router.push({ path:'/sys/orderDataDetail', query:{id:row.id} })
         },
         //当前页码发生变化时
         handleCurrentChange(val){
-            this.pageNo = val-1;
+            this.listQuery.pageNo = val-1;
             this.fetchData()
         },
         // 选择每页展示的条数
         handleSizeChange(val){
-            this.pageSize = val;
+            this.listQuery.pageSize = val;
             this.fetchData()
         },
         //获取部门列表
         async fetchData(){
-            this.isLoading = true;                        //显示Loading
-            const res = await getWorkList({
-                status: '0',                               //  审核状态( 0 未审核 1 审核通过 2拒绝 3二级审核通过 4 二级审核拒绝 )
-                pageSize: this.pageSize,                  // 分页（每页个数）
-                pageNo: this.pageNo,                      // 当前页
-                order: ''                                 // 默认创建时间倒序排列
-            })
+            this.isLoading = true;                        // 显示Loading
+            this.listQuery.userId = getUserId();              // 用户id
+            const res = await getWorkDataList(this.listQuery)
            
-            this.totalNum = res.data.totalNum;            //总条数
+            this.totalNum = res.data.totalNum;             //总条数
             this.orderList =  res.data.list;               //部门列表   
             this.orderList.forEach( item => {
                 item.createdAt = formatDate(new Date(Number(item.createdAt)), "yyyy-MM-dd hh:mm");
@@ -124,7 +137,7 @@ export default {
                 item.workUsers = item.workUsers.split(';')
             });                
             this.isLoading = false;                       //隐藏loading
-        }, 
+        },       
         
     }
 }
