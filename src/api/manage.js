@@ -2,10 +2,10 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 16:13:30
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-24 18:45:32
+ * @LastEditTime: 2020-11-07 11:49:44
  */ 
 import instance  from './index.js'
-let prefix = ''                       //url 前缀
+let prefix = '/000000'                       //url 前缀
 
 // 登录管理
 export const login = (data) => instance.post(`${prefix}/v1/device/sso/login`, data)                     //用户登录

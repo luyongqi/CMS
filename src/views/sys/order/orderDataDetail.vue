@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-13 17:53:23
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-24 09:40:30
+ * @LastEditTime: 2020-11-05 19:08:43
 -->
 <template>
     <div class="detail-container">
@@ -24,7 +24,15 @@
                         <div class="title">工序数据</div>
                         <div class="content" v-for="p in item.fileds" :key="p.filedName">
                            <span>步骤名称：{{p.filedNameNote}} </span>
-                           <span>步骤数据：{{p.filedValue}}</span>
+                           <span v-if="p.fieldInputType!='9'">步骤数据：{{p.filedValue}}</span>
+                            <div v-if="p.fieldInputType=='9'">
+                              
+                                <el-image :src="imgUrl+k" style="width:100px; height:100px;margin-right:20px;margin-top:20px" fit="cover" v-for="(k,i) in p.filedValue" :key="i">
+                                    <div slot="placeholder" class="image-slot">
+                                        加载中<span class="dot">...</span>
+                                    </div>
+                                </el-image>
+                            </div>
                         </div>
                     </el-col>
                 </el-row>
@@ -131,6 +139,8 @@
 import { getWorkDataInfo, setWorkDataAuth } from '@/api/manage';
 import { formatDate } from '@/utils/date'
 import { getUserId } from '@/utils/auth'
+import { imgUrl } from  '@/config'
+
 const defaultWorkApply = {       //工单详细信息
     id: null,                    //服务id
     workId: null,                //工单id 
@@ -153,6 +163,7 @@ const defaultWorkApply = {       //工单详细信息
 export default {
     data(){
         return {
+            imgUrl,                //图片ip
             id:null,        //服务id
             orderReturnApply: Object.assign({},defaultWorkApply),    //工单信息
             updateStatusParam: Object.assign({}, defaultUpdateStatusParam),    //审核处理
@@ -197,6 +208,14 @@ export default {
             if(res.retCode === '000000'){
                 this.orderReturnApply = res.data.detail
                 this.devList = res.data.detail.workDeviceIds      //该工单设备列表
+                this.devList.forEach((item)=>{
+                    item.fileds.forEach(p=>{
+                        if(p.fieldInputType=='9'){              //表示是图片或文件
+                            p.filedValue = p.filedValue.split(';')
+                        }
+                    })
+                })
+                console.log(this.devList)
             }else{
                 this.$message({
                     type: 'error',
