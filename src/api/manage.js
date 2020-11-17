@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 16:13:30
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-11-07 11:49:44
+ * @LastEditTime: 2020-11-07 14:50:49
  */ 
 import instance  from './index.js'
 let prefix = '/000000'                       //url 前缀
