@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:43:58
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-10 10:37:51
+ * @LastEditTime: 2020-11-26 09:38:28
 --> 
 <template>
   <div>
@@ -40,7 +40,7 @@
       Login,
     },
     created() {
-
+     
     },
     methods: {
       changeLoginRegister(){

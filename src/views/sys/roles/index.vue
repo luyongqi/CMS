@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-18 14:42:53
+ * @LastEditTime: 2020-12-19 11:34:47
 --> 
 <template>
     <div class="user-management">
@@ -17,14 +17,14 @@
                 <!-- 表格 -->
                 <el-table border  fit :data="RolList" @selection-change="selectChangeFn" highlight-current-row  v-loading="isLoading" >
                     <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
-                    <!-- <el-table-column fixed label="角色编号" width="200" prop="roleId" align="center"></el-table-column> -->
+                    <el-table-column fixed label="角色编号" width="300" prop="roleId" align="center"></el-table-column>
                     <el-table-column fixed label="角色名称"  prop="roleName" align="center"></el-table-column>
                     <el-table-column fixed label="角色编码"  prop="roleCode" align="center"></el-table-column>
-                    <el-table-column fixed label="角色类型"   align="center">
+                    <!-- <el-table-column fixed label="角色类型"   align="center">
                         <template slot-scope="scope">
                             {{scope.row.roleType | formatType}}
                         </template>
-                    </el-table-column>
+                    </el-table-column> -->
                     <!-- <el-table-column fixed label="操作人"  prop="updatedUser" align="center"></el-table-column>
                     <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column>
                     <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column> -->

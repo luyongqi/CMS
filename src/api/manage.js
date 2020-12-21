@@ -2,10 +2,23 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 16:13:30
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-11-07 14:50:49
+ * @LastEditTime: 2020-12-19 10:29:45
  */ 
 import instance  from './index.js'
-let prefix = '/000000'                       //url 前缀
+var prefix = '/000'                       //url 前缀
+// var prefix = ''                                 //url 前缀
+
+/**
+ * @description: 修改所有url前缀（除登录页查询单位列表接口时固定的，只有当登录时选择的单位有变化时才做修改 
+ *            修改时从localStorage 中取值(目的是防止在其他页面刷新时，又恢复到默认值)
+ *      调用该方法是在vue实例创建时的mounted中和选择的单位发生改变时
+ */
+export function setPrefix(){                
+    prefix = localStorage.getItem('preFix') || '/000'
+}
+
+// 登录页获取所有单位 
+export const checkIsOrg = (data) => instance.post('/000/v1/device/org/isOrgByCode', data)               //校验编码是否存在对应的单位
 
 // 登录管理
 export const login = (data) => instance.post(`${prefix}/v1/device/sso/login`, data)                     //用户登录

@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-28 10:29:50
+ * @LastEditTime: 2020-11-26 11:56:43
 --> 
 <template>
     <div class="user-management">
@@ -90,7 +90,7 @@ export default {
         } else if(value === '4'){
           return '二审未通过';
         }else{
-            return 'N/A'
+            return ''
         }
       }
     },
@@ -111,7 +111,7 @@ export default {
         },
         // 跳转至详情页
         navToDetail(row){
-            this.$router.push({ path:'/sys/orderDataDetail', query:{id:row.id} })
+            this.$router.push({ path:'/sys/orderDataDetail1', query:{id:row.id} })
         },
         //当前页码发生变化时
         handleCurrentChange(val){

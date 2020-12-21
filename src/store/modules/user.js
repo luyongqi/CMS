@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:52:31
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-21 09:49:25
+ * @LastEditTime: 2020-11-26 10:31:13
  */ 
 import { login, logout, getUserInfo } from '@/api/manage'
 import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth'
@@ -39,6 +39,7 @@ const user = {
           loginName:username,
           loginPass: userInfo.password,                  //未加密的密码
           service:'adminSys',
+          company:userInfo.company                       //所属单位编号
         }).then(response => {
           const tokenStr = response.data.token;
           const userId = response.data.userInfo.userId

@@ -2,11 +2,12 @@
  * @Author: 卢勇其
  * @Date: 2020-05-25 14:41:05
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-21 09:07:19
+ * @LastEditTime: 2020-12-19 11:22:46
  */ 
 import axios from 'axios';
 import { Message } from 'element-ui'
 import store from '../store'
+import router from '../router'
 import { getToken,removeToken,removesetUserId } from '@/utils/auth'
 
 // 全局设置
@@ -45,13 +46,15 @@ instance.interceptors.response.use(
         type: 'error',
         duration: 3000
       })
-      window.location.href = "/login";
+      router.push({ path: "/login" });
+      return Promise.reject(response.data.retCode)
     }else{
       Message({
         message: response.data.errInfo,
         type: 'error',
         duration: 3000
       })
+      return Promise.reject(response.data.retCode)
     } 
   },
   error => {
@@ -59,7 +62,7 @@ instance.interceptors.response.use(
     if(response&&response.status === 401) {
       // 清除缓存
       removesetUserId()                   //移除cookie中的userId
-      window.location.href = "/login";
+      router.push({ path: "/login" });
       return Promise.reject(error.response);
     }else{
       Message({
@@ -69,6 +72,7 @@ instance.interceptors.response.use(
         offset:150
       })
     }
+    return Promise.reject(error)
   }
 )
 

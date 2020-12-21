@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-11-07 11:48:00
+ * @LastEditTime: 2020-12-19 11:27:33
  */ 
 'use strict'
 // Template version: 1.3.1
@@ -18,11 +18,25 @@ module.exports = {
     assetsPublicPath: '/',
     // 配置反向代理
     proxyTable: { 
-      '/v1':{
+      '/000':{
         target: 'http://192.168.1.19:8380/',
         changeOrigin: true,
         pathRewrite: {
-          '^/v1': '/v1'
+          '^/000': '/'
+        }
+      }, 
+      '/001':{
+        target: 'http://192.168.1.19:8380/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/001': '/'
+        }
+      }, 
+      '/002':{
+        target: 'http://192.168.1.19:8380/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/002': '/'
         }
       }, 
     },

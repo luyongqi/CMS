@@ -36,6 +36,14 @@
               </span>
           </el-input>
         </el-form-item>
+        <el-form-item prop="orgCode">
+            <el-input name="orgCode"
+            type="text"
+            v-model="loginForm.orgCode"
+            autoComplete="on"
+            placeholder="请填写单位编号">
+          </el-input>
+        </el-form-item>
         <el-form-item style="margin-bottom: 20px;text-align: center">
           <el-button style="width: 45%" type="primary" :loading="loading" @click.native.prevent="handleLogin">
             登录
@@ -49,6 +57,7 @@
 <script>
   import  {mapState} from 'vuex'
   import {setSupport,getSupport,setCookie,getCookie} from '@/utils/support';
+  import { setPrefix,checkIsOrg } from '@/api/manage'
   export default {
     name: 'login',
     data() {
@@ -66,15 +75,29 @@
           callback()
         }
       };
+      var checkOrg = (rule, value, callback) => {
+        if (!value) {
+          return callback(new Error('单位编号不能为空'));
+        }
+        var reg = /^[0-9]*$/
+        if (!reg.test(value)) {
+          callback(new Error('请输入数字值'));
+        } else {
+          callback();
+        }
+      };
       return {
         loginForm: {
-          username: '',
-          password: '',
+          username: '',       //用户名
+          password: '',       //密码
+          orgCode: ''         //单位编号
         },
         loginRules: {
           username: [{required: true, trigger: 'blur', validator: validateUsername}],
-          password: [{required: true, trigger: 'blur', validator: validatePass}]
+          password: [{required: true, trigger: 'blur', validator: validatePass}],
+          orgCode: [{required: true, trigger: 'blur', validator: checkOrg}],
         },
+ 
         loading: false,
         pwdType: 'password',
         dialogVisible:false,
@@ -91,6 +114,9 @@
    
     },
     created() {
+      localStorage.setItem('preFix','/000')                //防止刷新登录时localStorage中preFix值与初始化值不一致
+      setPrefix()
+  
       this.loginForm.username = getCookie("username");
       this.loginForm.password = getCookie("password");
       if(this.loginForm.username === undefined||this.loginForm.username==null||this.loginForm.username===''){
@@ -112,19 +138,36 @@
               this.pwdType = 'password'
             }
         },
+        selectChange(val){              //下拉框选择发生变化
+          localStorage.setItem('preFix',val)
+          setPrefix()                              //修改所有请求前缀
+        },
         // 登录
         handleLogin() {
+            var that = this
             this.$refs.loginForm.validate(valid => {
               if (valid) {
                 this.loading = true;
-                this.$store.dispatch('Login', this.loginForm).then(() => {
-                  this.loading = false;
-                  setCookie("username",this.loginForm.username,30);
-                  setCookie("password",this.loginForm.password,30);
-                  this.$router.push('/')
-                }).catch(() => {
-                  this.loading = false
-                })
+                //先校验填写的单位编号是否存在
+                checkIsOrg({
+                  orgCode:this.loginForm.orgCode
+                }).then( res => {
+                  console.log(res,'success')
+                  localStorage.setItem('preFix',this.loginForm.orgCode)
+                  setPrefix()                              //修改所有请求前缀
+                  
+                  // 校验成功后登录
+                  that.$store.dispatch('Login', that.loginForm).then(() => {
+                    that.loading = false;
+                    setCookie("username",that.loginForm.username,30);
+                    setCookie("password",that.loginForm.password,30);
+                    that.$router.push('/')
+                  }).catch(() => {
+                    that.loading = false
+                  })
+                },()=>{
+                  that.loading = false
+                }) 
               } else {
                 return false
               } 

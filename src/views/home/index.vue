@@ -113,7 +113,7 @@
 
 <script>
   import {mapState} from 'vuex'
-
+   import { setPrefix} from '@/api/manage'
   export default {
     name: 'home',
     data() {
@@ -163,7 +163,7 @@
       ]),
     },
     created(){
-      
+        // setPrefix('/000000')                              //修改所有请求前缀
     },
     methods:{
      

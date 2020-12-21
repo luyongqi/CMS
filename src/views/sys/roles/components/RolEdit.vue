@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:39:54
+ * @LastEditTime: 2020-12-19 11:37:41
 -->
 <template>
   <el-dialog
@@ -30,7 +30,7 @@
             show-word-limit
             ></el-input>
         </el-form-item>
-        <el-form-item label="角色类型" prop="roleType">
+        <!-- <el-form-item label="角色类型" prop="roleType">
             <el-select v-model="form.roleType"   placeholder="请选择">
               <el-option
                 v-for="item in typeList"
@@ -40,7 +40,7 @@
                 style="width:100%"
               ></el-option>
             </el-select>
-        </el-form-item>
+        </el-form-item> -->
     </el-form>
     
     <div slot="footer" class="dialog-footer">
@@ -79,9 +79,9 @@
             { required: true, trigger: "blur", message: "请填写角色编码" },
             { min: 1, max: 20, message: '长度在 1 到 20 个字符', trigger: 'blur' }
           ],
-          roleType: [
-            { required: true, trigger: "change", message: "请选择角色类型" },
-          ],
+          // roleType: [
+          //   { required: true, trigger: "change", message: "请选择角色类型" },
+          // ],
         },
         title: "",
         dialogFormVisible: false,
@@ -99,7 +99,6 @@
    
         // 显示编辑弹框
         showEdit(row) {
-          console.log(row,555)
             if (!row) {
               this.title = "添加";
             } else {

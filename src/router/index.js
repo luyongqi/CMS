@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-21 09:13:16
+ * @LastEditTime: 2020-11-26 14:33:00
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -41,8 +41,14 @@ export const constantRouterMap = [
       {
         path: 'sys/orderDataDetail',
         component: () => import('@/views/sys/order/orderDataDetail'),
+        meta: {title: '工单数据详情', index:"12a040c3ec27492e8e25fa5acbf1df95"},
+      },
+      {
+        path: 'sys/orderDataDetail1',
+        component: () => import('@/views/sys/order/orderDataDetail1'),
         meta: {title: '工单数据详情', index:"8e312ec1b0574bc0abc13e194d7cace6"},
       },
+      
       {
         path: 'sys/roles/allocMenu',
         component: () => import('@/views/sys/roles/allocMenu'),

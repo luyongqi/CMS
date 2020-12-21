@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-08-14 17:56:00
+ * @LastEditTime: 2020-11-26 10:38:17
 --> 
 <template>
   <div id="app">
@@ -12,10 +12,12 @@
 
 <script>
   import rem from '@/assets/js/rem.js'
+  import { setPrefix } from '@/api/manage.js'
   export default {
     name: 'App',
     mounted(){
-      rem.init()    //初始化rem
+      setPrefix()      //设置所有请求前缀（除登录页单位查询接口）
+      rem.init()       //初始化rem
     }
   }
 </script>
