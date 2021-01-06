@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:35:29
+ * @LastEditTime: 2020-12-29 09:45:19
 -->
 <template>
   <el-dialog
@@ -42,16 +42,13 @@
             </el-select>
         </el-form-item>
         
-        <el-form-item prop="workDeviceIds" label="工作设备">
-            <el-select v-model="form.workDeviceIds" multiple   placeholder="请选择设备">
-              <el-option
-                v-for="item in devList"
-                :key="item.workDeviceIds"
-                :label="item.deviceName"
-                :value="item.workDeviceIds"
-                style="width:100%"
-              ></el-option>
-            </el-select>
+        <el-form-item prop="workDeviceIds" label="工单步骤">
+            <el-cascader
+            v-model="form.workDeviceIds"
+            placeholder="选择步骤"
+            :options="devList"
+            :props="{ multiple: true, value:'id',label:'name',children:'childer' }"
+            filterable></el-cascader>
         </el-form-item>
 
         <el-form-item label="工作说明" prop="workNote">
@@ -92,7 +89,7 @@
 </template>
 
 <script>
-  import { getStaffList, getDeviceList, addWorkOrder } from "@/api/manage";
+  import { getStaffList, getAllStepTreeList, addWorkOrder } from "@/api/manage";
   import { mapState, mapActions } from 'vuex'
   import { getUserId } from '@/utils/auth'
 
@@ -148,7 +145,7 @@
         })
     },
     created() {
-      this.getDevList()
+      this.getStepTreeList() 
       this.getStfList()
     },
     methods: {
@@ -205,17 +202,12 @@
            })
         },
         // 获取设备列表
-        async getDevList(){
-           const res = await getDeviceList({
-              status: '1',                              //  0：停用 1：正常
-              pageSize: 1000,                        // 分页（每页个数）
-              pageNo: 0,                             // 当前页
-              order: ''                              // 默认创建时间倒序排列
-           })
+        async getStepTreeList(){
+           const res = await getAllStepTreeList({ })
            this.devList =  res.data.list
-           this.devList.forEach((item)=>{
-             item.workDeviceIds = item.deviceId
-           })
+          //  this.devList.forEach((item)=>{
+          //    item.workDeviceIds = item.deviceId
+          //  })
         },
         // 保存数据
         save() {

@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:42:00
+ * @LastEditTime: 2020-12-30 10:31:39
 -->
 <template>
   <el-dialog
@@ -198,7 +198,7 @@
         })
     },
     created() {
-        this.getProList()
+      this.getProList()
     },
     methods: {
    
@@ -242,9 +242,9 @@
         async getProList(){
            const res = await getProjectList({
               status: '1',                              //  0：停用 1：正常
-              pageSize: 1000,                        // 分页（每页个数）
-              pageNo: 0,                             // 当前页
-              order: ''                              // 默认创建时间倒序排列
+              pageSize: 1000,                          // 分页（每页个数）
+              pageNo: 0,                               // 当前页
+              order: ''                               // 默认创建时间倒序排列
            })
            this.itemList =  res.data.list
         },

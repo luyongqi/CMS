@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-11-26 14:33:00
+ * @LastEditTime: 2020-12-31 09:40:07
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -36,7 +36,7 @@ export const constantRouterMap = [
       {
         path: 'sys/orderDetail',
         component: () => import('@/views/sys/order/orderDetail'),
-        meta: {title: '工单审核详情', index:"0bd81a48e0d944098a6842c809b15c20"},
+        meta: {title: '工单审核详情', index:"f1973dbcf1c149b9832e352779663278"},
       },
       {
         path: 'sys/orderDataDetail',

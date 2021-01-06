@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 16:13:30
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-12-19 10:29:45
+ * @LastEditTime: 2020-12-26 10:00:53
  */ 
 import instance  from './index.js'
 var prefix = '/000'                       //url 前缀
@@ -64,6 +64,7 @@ export const addDevice = (data) => instance.post(`${prefix}/v1/device/device/dev
 export const getDeviceList = (data) => instance.post(`${prefix}/v1/device/device/getDeviceList`, data)   //设备列表
 export const getDeviceInfo = (data) => instance.post(`${prefix}/v1/device/device/deviceInfo`, data)      //设备信息详情
 export const delDevice = (data) => instance.post(`${prefix}/v1/device/device/deviceDel`, data)           //删除设备
+export const getAllStepTreeList = (data) => instance.post(`${prefix}/v1/device/device/getAllStepList`, data)      //查询所有设备对应步骤树形结构列表
 
 //分组管理
 export const addGroup = (data) => instance.post(`${prefix}/v1/device/group/groupAdd`, data)               //新建分组

@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-09-18 11:22:15
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-21 10:04:58
+ * @LastEditTime: 2021-01-06 16:42:05
 -->
 <template>
   <el-card class="form-container" shadow="never">
@@ -64,7 +64,10 @@
     created() {
       this.roleId = this.$route.query.roleId;
       this.findTreeData()
-      this.handleRoleSelectChange(this.roleId)
+     
+    },
+    mounted(){
+        this.handleRoleSelectChange(this.roleId)
     },
     methods: {
       // 获取所有菜单数据

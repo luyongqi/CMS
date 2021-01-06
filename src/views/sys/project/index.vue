@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:39:15
+ * @LastEditTime: 2020-12-30 09:59:58
 --> 
 <template>
     <div class="user-management">
@@ -177,7 +177,7 @@ export default {
         },
         // 跳转至设备管理
         navTo(row){
-            this.$router.push({path:'/sys/steps',query:{row}})
+            this.$router.push({path:'/sys/steps',query:{id:row.deviceId}})
         },
         //当前页码发生变化时
         handleCurrentChange(val){

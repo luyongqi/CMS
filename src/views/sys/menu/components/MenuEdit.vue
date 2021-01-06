@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:34:36
+ * @LastEditTime: 2020-12-30 13:53:39
 -->
 <template>
   <el-dialog
@@ -35,14 +35,14 @@
             show-word-limit
             ></el-input>
         </el-form-item>
-        <el-form-item label="子页面" prop="subpage">
+        <!-- <el-form-item label="子页面" prop="subpage">
             <el-input
             v-model.trim="form.subpage"
             autocomplete="off"
             maxlength="100"
             show-word-limit
             ></el-input>
-        </el-form-item>
+        </el-form-item> -->
         <el-form-item label="菜单图标" prop="menuIcon">
             <el-input
             v-model.trim="form.menuIcon"

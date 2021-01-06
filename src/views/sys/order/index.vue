@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:36:12
+ * @LastEditTime: 2020-12-30 16:31:34
 --> 
 <template>
     <div class="user-management">
@@ -44,7 +44,10 @@
                     </el-table-column>
                     <el-table-column fixed="left" label="审核状态"  align="center">
                         <template slot-scope="scope">
-                            <p>{{scope.row.status | verifyStatusFilter}}</p>
+                            <el-tag 
+                                :type="scope.row.status=='0'?'':scope.row.status=='1'?'warning':scope.row.status=='2'||scope.row.status=='4'||scope.row.status=='9'?'danger':scope.row.status=='3'?'success':''" 
+                                disable-transitions
+                            >{{scope.row.status | verifyStatusFilter}}</el-tag>
                             <!-- <p>
                                 <el-button type="text" @click="handleShowVerifyDetail(scope.$index, scope.row)">
                                     审核详情
@@ -54,13 +57,13 @@
                     </el-table-column>
                     <el-table-column fixed="left" label="操作" width="200" align="center">
                         <template slot-scope="scope">
-                            <!-- <el-button type="text" size="mini" @click.stop="navToDetail(scope.row)">
+                            <el-button type="text" size="mini" @click.stop="navToDetail(scope.row)">
                                 详情
-                            </el-button>  -->
-                            <el-button  size="mini"  icon="el-icon-edit" @click.stop="handleEdit(scope.row)">
+                            </el-button> 
+                            <el-button  size="text" :disabled="scope.row.status=='0'||scope.row.status=='2'||scope.row.status=='4'?false:true"  @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 
-                            <el-button  size="mini"  icon="el-icon-delete" @click.stop="handleDel(scope.row)">
+                            <el-button  size="text" :disabled="scope.row.status=='9'" @click.stop="handleDel(scope.row)">
                                 删除
                             </el-button> 
                         </template>
@@ -160,6 +163,8 @@ export default {
             return '审核通过';
             } else if(value === '4'){
             return '审核未通过';
+            }else if(value === '9'){
+            return '工单失效';
             }
         },
     },
@@ -252,7 +257,7 @@ export default {
         },
         // 跳转至详情页
         navToDetail(row){
-            this.$router.push({ path:'/sys/steps/stepDetail', query:{row} })
+            this.$router.push({ path:'/sys/orderDetail', query:{id:row.id} })
         },
         //当前页码发生变化时
         handleCurrentChange(val){
@@ -268,11 +273,9 @@ export default {
         async fetchData(){
             this.isLoading = true;                          //显示Loading
             const res = await getWorkList(this.listQuery)   //查询列表
-           
             this.totalNum = res.data.totalNum;              //总条数
             this.orderList =  res.data.list;                //部门列表   
-            this.orderList.forEach( item => {
-                item.workDeviceIds = item.workDeviceIds.split(';')
+            this.orderList.forEach( item => {  
                 item.workUsers = item.workUsers.split(';')
             });                
             this.isLoading = false;                         //隐藏loading
