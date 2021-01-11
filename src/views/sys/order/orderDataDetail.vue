@@ -2,42 +2,75 @@
  * @Description: 
  * @Date: 2020-08-13 17:53:23
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-11-05 19:08:43
+ * @LastEditTime: 2021-01-11 14:05:03
 -->
 <template>
     <div class="detail-container">
         
         <!-- 工作数据 -->
         <el-card shadow="never">
-            <span class="font-title-medium">工单数据</span>
-            <div class="form-container-border" v-for="item in devList" :key="item.deviceId">
-                <el-row>
-                    <el-col class="form-border form-left-bg font-small" :span="4">设备名称</el-col>
-                    <el-col class="form-border font-small" :span="4">{{item.deviceName}}</el-col>
-                    <el-col class="form-border form-left-bg font-small" :span="4">设备编号</el-col>
-                    <el-col class="form-border font-small" :span="4">{{item.deviceId}}</el-col>
-                    <el-col class="form-border form-left-bg font-small" :span="4">设备型号</el-col>
-                    <el-col class="form-border font-small" :span="4">{{item.deviceModel}}</el-col>
-                </el-row>
-                <el-row>
-                    <el-col class="form-border font-small workData" :span="24">
-                        <div class="title">工序数据</div>
-                        <div class="content" v-for="p in item.fileds" :key="p.filedName">
-                           <span>步骤名称：{{p.filedNameNote}} </span>
-                           <span v-if="p.fieldInputType!='9'">步骤数据：{{p.filedValue}}</span>
-                            <div v-if="p.fieldInputType=='9'">
-                              
-                                <el-image :src="imgUrl+k" style="width:100px; height:100px;margin-right:20px;margin-top:20px" fit="cover" v-for="(k,i) in p.filedValue" :key="i">
-                                    <div slot="placeholder" class="image-slot">
-                                        加载中<span class="dot">...</span>
-                                    </div>
-                                </el-image>
-                            </div>
-                        </div>
-                    </el-col>
-                </el-row>
+            <div style="margin-top: 20px">
+                <svg-icon icon-class="marker" style="color: #606266"></svg-icon>
+                <span class="font-small">步骤信息</span>
             </div>
-   
+            <div v-for="dev in devList" :key="dev.deviceId">
+                <div class="table-layout">
+                    <!-- 第一行显示名称 -->
+                    <el-row>
+                        <el-col :span="4" class="table-cell-title">设备名称</el-col>
+                        <el-col :span="4" class="table-cell">{{dev.deviceName}}</el-col>
+                        <el-col :span="4" class="table-cell-title">设备编号</el-col>
+                        <el-col :span="4" class="table-cell">{{dev.deviceId}}</el-col>
+                        <el-col :span="4" class="table-cell-title">设备型号</el-col>
+                        <el-col :span="4" class="table-cell">{{dev.deviceModel}}</el-col>
+                    </el-row>
+                 
+                    <!-- 第二行显示具体项目和步骤 -->
+                    <el-row>
+                        <el-col :span="24" style="border-bottom: 1px solid #DCDFE6;">
+                            <div v-for="(item,i) in dev.items" :key="item.itemId" class="step-content">
+                                <span class="item-name">项目 {{i+1}}/{{dev.items.length}}： {{item.itemName}} </span>
+                                <!-- 步骤 -->
+                                <div v-for="(step,k) in item.steps" :key="step.stepId" class="step-item">
+                                    <div>{{k+1}}.{{step.stepName}}：{{step.stepContent}}</div>
+                                    <!-- 文本框 '1'-->
+                                    <div class="step-indent" v-if="step.stepInputType==='1'">
+                                        <el-input placeholder="请填写内容" :value="step.filedValue" style="width:250px"></el-input>
+                                    </div>
+                                    <!-- 数字值 '2'-->
+                                    <div class="step-indent" v-if="step.stepInputType==='2'">
+                                        <div>数值范围：{{step.stepInputMin}}~{{step.stepInputMax}}</div>
+                                        <el-input placeholder="请输入数值" :value="step.filedValue" style="width:250px"></el-input>
+                                    </div>
+                                    <!-- 单选 '5'-->
+                                    <div class="step-indent" v-if="step.stepInputType==='5'">
+                                        <el-radio :label='c' :value="step.filedValue" v-for="(c,j) in step.stepInputContent.split(';')" :key='j'>{{c}}</el-radio>
+                                    </div>
+                                    <!-- 多选 '7'-->
+                                    <div class="step-indent" v-if="step.stepInputType==='7'">
+                                        <el-checkbox-group :value="step.filedValue.split(';')">
+                                            <el-checkbox :label='c' v-for="(c,j) in step.stepInputContent.split(';')" :key='j'>{{c}}</el-checkbox>
+                                        </el-checkbox-group>
+                                    </div>
+                                    <!-- 图片/文件 '9'-->
+                                    <div class="step-indent" v-if="step.stepInputType==='9'">
+                                        <el-upload
+                                            action="https://jsonplaceholder.typicode.com/posts/"
+                                            list-type="picture-card"
+                                            :file-list="step.filedValue"
+                                            disabled
+                                            :on-preview="handlePictureCardPreview"
+                                            :on-remove="handleRemove">
+                                            <i class="el-icon-plus"></i>
+                                        </el-upload>
+                                    </div>
+                                </div>
+                            </div>
+                        </el-col>
+                    </el-row>
+                </div>
+            </div>
+                
         </el-card>
 
         <!-- 工单信息 -->
@@ -207,15 +240,20 @@ export default {
             const res = await getWorkDataInfo({ id })
             if(res.retCode === '000000'){
                 this.orderReturnApply = res.data.detail
-                this.devList = res.data.detail.workDeviceIds      //该工单设备列表
+                 this.devList = res.data.detail.list      //该工单所有步骤信息
                 this.devList.forEach((item)=>{
-                    item.fileds.forEach(p=>{
-                        if(p.fieldInputType=='9'){              //表示是图片或文件
-                            p.filedValue = p.filedValue.split(';')
-                        }
+                    item.items.forEach((step)=>{
+                        step.steps.forEach((s)=>{
+                            if(s.stepInputType==='9'){
+                                var arr = s.filedValue.split(',')
+                                s.filedValue =  arr.map(p=>{
+                                    return {url:`${imgUrl}${p}`}
+                                })  
+                            }
+                            
+                        })
                     })
                 })
-                console.log(this.devList)
             }else{
                 this.$message({
                     type: 'error',
@@ -296,14 +334,70 @@ export default {
     }
     .workData{
         .title{
-        line-height: 20px;
-    }
-    .content{
-        margin-top:10px;
-        & span{
-            margin-right: 20px;
+            line-height: 20px;
+        }
+        .content{
+            margin-top:10px;
+            & span{
+                margin-right: 20px;
+            }
         }
     }
+    // 步骤信息
+    .table-layout {
+        margin-top: 20px;
+        border-left: 1px solid #DCDFE6;
+        border-top: 1px solid #DCDFE6;
+        .table-cell {
+            line-height: 20px;
+            border-right: 1px solid #DCDFE6;
+            border-bottom: 1px solid #DCDFE6;
+            padding: 10px;
+            font-size: 14px;
+            color: #606266;
+            text-align: center;
+            overflow: hidden;
+        }
+        .table-cell-title {
+            line-height: 20px;
+            border-right: 1px solid #DCDFE6;
+            border-bottom: 1px solid #DCDFE6;
+            padding: 10px;
+            background: #F2F6FC;
+            text-align: center;
+            font-size: 14px;
+            color: #303133;
+        }
+        // 步骤内容
+        .step-content:first-child{
+            padding-top: 20px;
+        }
+        .step-content{
+            border-right: 1px solid #DCDFE6;
+            padding: 0 60px;
+            padding-bottom: 20px;
+            line-height: 30px;
+            font-size: 14px;
+            .item-name{
+                margin-right: 15px;
+                font-weight: bold;
+                font-size:15px;
+            }
+            .step-item{
+                margin-top: 10px;
+                .step-indent{
+                    margin-left: 15px;
+                }
+                & /deep/ .el-upload--picture-card{
+                    width: 80px;
+                    height: 80px;
+                    line-height: 80px;
+                }
+                 & /deep/ .el-upload-list--picture-card .el-upload-list__item{
+                    width: 80px;
+                    height: 80px;
+                }
+            } 
+        }
     }
-    
 </style>

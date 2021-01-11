@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-28 10:20:14
+ * @LastEditTime: 2021-01-11 13:56:24
 --> 
 <template>
     <div class="user-management">
@@ -133,7 +133,6 @@ export default {
                 item.createdAt = formatDate(new Date(Number(item.createdAt)), "yyyy-MM-dd hh:mm");
                 item.updatedAt = formatDate(new Date(Number(item.updatedAt)), "yyyy-MM-dd hh:mm");
                 item.auditedAt = item.auditedAt?formatDate(new Date(Number(item.auditedAt)), "yyyy-MM-dd hh:mm"):'N/A'
-                item.workDeviceIds = item.workDeviceIds.split(';')
                 item.workUsers = item.workUsers.split(';')
             });                
             this.isLoading = false;                       //隐藏loading
