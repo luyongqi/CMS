@@ -51,6 +51,9 @@
               <div @click="logout">
                 <el-dropdown-item divided >退出</el-dropdown-item>
               </div>
+              <div @click="handleChange">
+                <el-dropdown-item divided >修改密码</el-dropdown-item>
+              </div>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
@@ -128,6 +131,10 @@ export default {
          }
         // location.reload()    // 为了重新实例化vue-router对象 避免bug
       })
+    },
+    // 修改密码
+    handleChange(){
+      this.$emit('onPwd')
     }
   }
 };

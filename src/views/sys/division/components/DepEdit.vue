@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:30:05
+ * @LastEditTime: 2021-01-15 17:08:58
 -->
 <template>
   <el-dialog
@@ -21,12 +21,12 @@
             ></el-input>
         </el-form-item>
 
-        <el-form-item prop="status" label="是否启用">
+        <!-- <el-form-item prop="status" label="是否启用">
             <el-radio-group v-model="form.status">
               <el-radio label="1">启用</el-radio>
               <el-radio label="0">停用</el-radio>
             </el-radio-group>
-        </el-form-item>
+        </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="close">取 消</el-button>

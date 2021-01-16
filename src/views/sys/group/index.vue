@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:34:03
+ * @LastEditTime: 2021-01-15 18:47:26
 --> 
 <template>
     <div class="user-management">
@@ -35,7 +35,11 @@
                     <el-table-column fixed label="操作人"  prop="updatedUser" align="center"></el-table-column>
                     <el-table-column fixed label="创建时间"  prop="createdAt" align="center"></el-table-column>
                     <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column>
-                    
+                    <el-table-column fixed="left" label="状态"  align="center">
+                        <template slot-scope="scope">
+                            <el-tag :type="scope.row.status=='0'?'danger':''">{{scope.row.status=='0'?'停用':'正常'}}</el-tag>
+                        </template>
+                    </el-table-column>
                     <el-table-column fixed="left" label="操作" width="250" align="center">
                         <template slot-scope="scope">
                             <el-button  size="mini" @click.stop="navTo(scope.row)">
@@ -44,7 +48,7 @@
                             <el-button size="mini" @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 
-                            <el-button size="mini" disabled @click.stop="handleDel(scope.row)">
+                            <el-button size="mini"  @click.stop="handleForbid(scope.row)">
                                 {{scope.row.status=='0'?'启用':'禁用'}}
                             </el-button> 
                         </template>
@@ -93,7 +97,7 @@
 </template>
 
 <script>
-import { getGroupList, getGroupInfo, delGroup } from '@/api/manage';
+import { getGroupList, getGroupInfo, delGroup, isForbidGroup } from '@/api/manage';
 import Edit from "./components/GroEdit";
 import { formatDate } from '@/utils/date'
 import { getUserId } from '@/utils/auth'
@@ -106,7 +110,7 @@ export default {
                 groupName:'',                               //项目名称
                 pageSize: 10,                             // 分页（每页个数）
                 pageNo: 0,                                // 当前页
-                status: '1',                              //  0：停用 1：正常
+                status: '',                              //  0：停用 1：正常
                 order: ''                                 // 默认创建时间倒序排列
             },
             operateType: null,                //操作
@@ -167,6 +171,29 @@ export default {
                         this.$message({
                             type: 'success',
                             message: '删除成功!' 
+                        });
+                        this.fetchData();     //刷新
+                    }
+                })  
+            })  
+        },
+         // 是否禁用
+        async handleForbid(row){
+            var str = row.status=='1'?'禁用':'启用'
+            this.$confirm(`此操作将${str}该分组, 是否继续?`, '提示',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then( () => {
+                isForbidGroup({
+                    id:row.id,               //单位id
+                    status:row.status=='1'?'0':'1',       //0-停用 1-正常
+                    userId:getUserId()                   //用户id
+                }).then( (res) =>　{
+                    if(res.retCode==="000000"){
+                        this.$message({
+                            type: 'success',
+                            message: `${str}成功!`
                         });
                         this.fetchData();     //刷新
                     }

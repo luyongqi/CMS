@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-28 09:35:05
+ * @LastEditTime: 2021-01-15 17:06:05
 --> 
 <template>
     <div class="user-management">
@@ -25,9 +25,6 @@
                         <template slot-scope="scope">
                             <el-button size="mini" @click.stop="handleEdit(scope.row)">
                                 编辑
-                            </el-button> 
-                            <el-button size="mini" disabled @click.stop="handleDel(scope.row)">
-                                {{scope.row.status=='0'?'启用':'禁用'}}
                             </el-button> 
                         </template>
                     </el-table-column>
@@ -93,27 +90,7 @@ export default {
                 this.$refs["edit"].showEdit();
             }
         },
-        // 删除单位
-        async handleDel(row){
-            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示',{
-                confirmButtonText: '确定',
-                cancelButtonText: '取消',
-                type: 'warning'
-            }).then( () => {
-                delCompanyInfo({
-                    ids:[ row.id+'' ],               //单位id
-                    userId:getUserId()                 //用户id
-                }).then( (res) =>　{
-                    if(res.retCode==="000000"){
-                        this.$message({
-                            type: 'success',
-                            message: '删除成功!' 
-                        });
-                        this.fetchData();     //刷新
-                    }
-                })  
-            })  
-        },
+   
         //当前页码发生变化时
         handleCurrentChange(val){
             this.pageNo = val-1;

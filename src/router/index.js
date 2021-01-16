@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-12-31 09:40:07
+ * @LastEditTime: 2021-01-15 17:04:51
  */ 
 import Vue from 'vue'
 import Router from 'vue-router'
@@ -11,6 +11,7 @@ import store from '@/store'
 import { getToken,removeToken,getUserId } from '@/utils/auth'
 import { getAllMenuList,getMenuByUser } from '@/api/manage';
 import { treeList } from '@/utils/common'
+import { setPrefix } from '@/api/manage'
 
 const originalPush = Router.prototype.push
 Router.prototype.push = function push(location) {
@@ -81,7 +82,8 @@ router.beforeEach((to, from, next)=>{
     }else{
       // 加载动态菜单和路由 
       if(store.state.user.roles.length===0){
-        store.dispatch('GetInfo',{token}).then( res =>{   //拉取用户信息
+        setPrefix()             //防止刷新页面时 接口前缀是之前的默认值
+        store.dispatch('GetInfo').then( res =>{   //拉取用户信息
           addDynamicMenuAndRoutes( to,from,next )
           next()
         }).catch((err)=>{

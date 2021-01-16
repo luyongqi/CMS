@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-19 17:30:55
+ * @LastEditTime: 2021-01-15 18:22:53
 --> 
 <template>
     <div class="user-management">
@@ -37,7 +37,7 @@
                     <el-table-column fixed label="更新时间"  prop="updatedAt" align="center"></el-table-column>
                     <el-table-column fixed="left" label="状态" align="center">
                         <template slot-scope="scope">
-                            <el-tag>{{scope.row.status=='0'?'停用':'正常'}}</el-tag>
+                            <el-tag :type="scope.row.status=='0'?'danger':''">{{scope.row.status=='0'?'停用':'正常'}}</el-tag>
                         </template>
                     </el-table-column>
                    
@@ -49,7 +49,7 @@
                             <el-button size="mini" @click.stop="handleEdit(scope.row)">
                                 编辑
                             </el-button> 
-                            <el-button size="mini" disabled @click.stop="handleDel(scope.row)">
+                            <el-button size="mini" @click.stop="handleForbid(scope.row)">
                                 {{scope.row.status=='0'?'启用':'禁用'}}
                             </el-button> 
                         </template>
@@ -98,7 +98,7 @@
 </template>
 
 <script>
-import { getDeptList, getDeptInfo, delDept } from '@/api/manage';
+import { getDeptList, getDeptInfo, delDept, isForbidDept } from '@/api/manage';
 import Edit from "./components/DepEdit";
 import { formatDate } from '@/utils/date'
 import { getUserId } from '@/utils/auth'
@@ -110,7 +110,7 @@ export default {
                 groupName:'',                               //部门名称
                 pageSize: 10,                             // 分页（每页个数）
                 pageNo: 0,                                // 当前页
-                status: '1',                              //  0：停用 1：正常
+                status: '',                              //  0：停用 1：正常
                 order: ''                                 // 默认创建时间倒序排列
             },
             operateType: null,                //操作
@@ -167,6 +167,29 @@ export default {
                         this.$message({
                             type: 'success',
                             message: '删除成功!' 
+                        });
+                        this.fetchData();     //刷新
+                    }
+                })  
+            })  
+        },
+         // 是否禁用
+        async handleForbid(row){
+            var str = row.status=='1'?'禁用':'启用'
+            this.$confirm(`此操作将${str}该部门, 是否继续?`, '提示',{
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then( () => {
+                isForbidDept({
+                    id:row.id,               //单位id
+                    status:row.status=='1'?'0':'1',       //0-停用 1-正常
+                    userId:getUserId()                   //用户id
+                }).then( (res) =>　{
+                    if(res.retCode==="000000"){
+                        this.$message({
+                            type: 'success',
+                            message: `${str}成功!`
                         });
                         this.fetchData();     //刷新
                     }

@@ -138,10 +138,7 @@
               this.pwdType = 'password'
             }
         },
-        selectChange(val){              //下拉框选择发生变化
-          localStorage.setItem('preFix',val)
-          setPrefix()                              //修改所有请求前缀
-        },
+  
         // 登录
         handleLogin() {
             var that = this
@@ -152,7 +149,6 @@
                 checkIsOrg({
                   orgCode:this.loginForm.orgCode
                 }).then( res => {
-                  console.log(res,'success')
                   localStorage.setItem('preFix',this.loginForm.orgCode)
                   setPrefix()                              //修改所有请求前缀
                   

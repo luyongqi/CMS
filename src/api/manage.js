@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 16:13:30
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-12-26 10:00:53
+ * @LastEditTime: 2021-01-16 09:56:49
  */ 
 import instance  from './index.js'
 var prefix = '/000'                       //url 前缀
@@ -25,6 +25,7 @@ export const login = (data) => instance.post(`${prefix}/v1/device/sso/login`, da
 export const register = (data) => instance.post(`${prefix}/v1/device/user/register`, data)              //用户注册
 export const logout = (data) => instance.post(`${prefix}/v1/device/sso/logout`, data)                   //用户注销
 export const updatedPwd = (data) => instance.post(`${prefix}/v1/device/sso/pwdUpdate`, data)            //重置密码
+export const changePwd = (data) => instance.post(`${prefix}/v1/device/sso/pwdModify`, data)            //修改密码
 
 //用户管理
 export const addUser = (data) => instance.post(`${prefix}/v1/device/user/userAdd`, data)                 //新建用户
@@ -52,12 +53,14 @@ export const addCompany = (data) => instance.post(`${prefix}/v1/device/org/orgAd
 export const getCompanyList = (data) => instance.post(`${prefix}/v1/device/org/getOrgList`, data)        //单位列表
 export const getCompanyDetail = (data) => instance.post(`${prefix}/v1/device/org/orgInfo`, data)         //单位详情
 export const delCompanyInfo = (data) => instance.post(`${prefix}/v1/device/org/orgDel`, data)            //单位信息删除
+export const isForbidCompany = (data) => instance.post(`${prefix}/v1/device/org/updateStatus`, data)       //是否禁用单位 0-停用 1-正常
 
 //部门管理
 export const addDepartment = (data) => instance.post(`${prefix}/v1/device/dept/deptAdd`, data)           //新建部门
 export const getDeptList = (data) => instance.post(`${prefix}/v1/device/dept/getDeptList`, data)         //部门列表
 export const getDeptInfo = (data) => instance.post(`${prefix}/v1/device/dept/deptInfo`, data)            //部门信息详情
 export const delDept = (data) => instance.post(`${prefix}/v1/device/dept/deptDel`, data)                 //删除部门
+export const isForbidDept = (data) => instance.post(`${prefix}/v1/device/dept/updateStatus`, data)       //是否禁用部门 0-停用 1-正常
 
 // 设备管理
 export const addDevice = (data) => instance.post(`${prefix}/v1/device/device/deviceAdd`, data)           //新建设备
@@ -65,12 +68,14 @@ export const getDeviceList = (data) => instance.post(`${prefix}/v1/device/device
 export const getDeviceInfo = (data) => instance.post(`${prefix}/v1/device/device/deviceInfo`, data)      //设备信息详情
 export const delDevice = (data) => instance.post(`${prefix}/v1/device/device/deviceDel`, data)           //删除设备
 export const getAllStepTreeList = (data) => instance.post(`${prefix}/v1/device/device/getAllStepList`, data)      //查询所有设备对应步骤树形结构列表
+export const isForbidDevice = (data) => instance.post(`${prefix}/v1/device/device/updateStatus`, data)       //是否禁用设备 0-停用 1-正常
 
 //分组管理
 export const addGroup = (data) => instance.post(`${prefix}/v1/device/group/groupAdd`, data)               //新建分组
 export const getGroupList = (data) => instance.post(`${prefix}/v1/device/group/getGroupList`, data)       //分组列表
 export const getGroupInfo = (data) => instance.post(`${prefix}/v1/device/group/groupInfo`, data)          //分组信息详情
 export const delGroup = (data) => instance.post(`${prefix}/v1/device/group/groupDel`, data)               //删除分组
+export const isForbidGroup = (data) => instance.post(`${prefix}/v1/device/group/updateStatus`, data)       //是否禁用分组 0-停用 1-正常
 
 //人员管理
 export const addStaff = (data) => instance.post(`${prefix}/v1/device/user/userAdd`, data)                 //新建人员
@@ -83,12 +88,14 @@ export const addProject = (data) => instance.post(`${prefix}/v1/device/item/item
 export const getProjectList = (data) => instance.post(`${prefix}/v1/device/item/getItemList`, data)      //项目列表
 export const getProjectInfo = (data) => instance.post(`${prefix}/v1/device/item/itemInfo`, data)         //项目信息
 export const delProject = (data) => instance.post(`${prefix}/v1/device/item/itemDel`, data)              //删除项目
+export const isForbidProject = (data) => instance.post(`${prefix}/v1/device/item/updateStatus`, data)       //是否禁用项目 0-停用 1-正常
 
 //步骤管理
 export  const addStep = (data) => instance.post(`${prefix}/v1/device/step/stepAdd`,data)                 //新建步骤
 export  const getStepList = (data) => instance.post(`${prefix}/v1/device/step/getStepList`,data)         //步骤列表
 export  const getStepInfo = (data) => instance.post(`${prefix}/v1/device/step/stepInfo`,data)            //步骤信息
 export  const delStep = (data) => instance.post(`${prefix}/v1/device/step/stepDel`,data)                 //删除步骤
+export const isForbidStep = (data) => instance.post(`${prefix}/v1/device/step/updateStatus`, data)       //是否禁用步骤 0-停用 1-正常
 
 //工单管理
 export  const addWorkOrder = (data) => instance.post(`${prefix}/v1/device/work/workAdd`,data)            //新建工单

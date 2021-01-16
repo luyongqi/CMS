@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-09 09:52:31
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-11-26 10:31:13
+ * @LastEditTime: 2021-01-15 16:51:59
  */ 
 import { login, logout, getUserInfo } from '@/api/manage'
 import { getToken, setToken, removeToken, setUserId, getUserId } from '@/utils/auth'
@@ -57,15 +57,9 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        // let userId = sessionStorage.getItem("userId")
         let userId = getUserId();              //cookie中获取userId
         getUserInfo({userId}).then(response => {
           const data = response.data
-          // if (data.roles && data.roles.length > 0) {    // 验证返回的roles是否是一个非空数组
-          //   commit('SET_ROLES', data.roles)
-          // } else {
-          //   reject('getInfo: roles must be a non-null array !')
-          // }
           commit('SET_ROLES', ['admin'])
           commit('SET_USERINFO', data.detail)
           resolve(response)
