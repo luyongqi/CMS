@@ -125,6 +125,13 @@
       if(this.loginForm.password === undefined||this.loginForm.password==null){
         this.loginForm.password = '';
       }
+      let this_ = this;
+      document.onkeydown = function(e) {
+        var key = window.event.keyCode;
+        if (key == 13) {
+          this_.handleLogin();
+        }
+      }
     },
     methods: {
         changeComponent(){

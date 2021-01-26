@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-13 17:53:23
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-11 14:05:03
+ * @LastEditTime: 2021-01-23 17:31:28
 -->
 <template>
     <div class="detail-container">
@@ -224,7 +224,7 @@ export default {
       },
        formatTime(time) {             //格式化时间
         if (time == null || time === '') {
-          return 'N/A';
+          return '';
         }
         let date = new Date(time);
         return formatDate(date, 'yyyy-MM-dd hh:mm:ss')

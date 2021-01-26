@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-09-18 11:22:15
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-06 16:42:05
+ * @LastEditTime: 2021-01-23 09:52:51
 -->
 <template>
   <el-card class="form-container" shadow="never">
@@ -67,7 +67,7 @@
      
     },
     mounted(){
-        this.handleRoleSelectChange(this.roleId)
+        
     },
     methods: {
       // 获取所有菜单数据
@@ -76,12 +76,13 @@
           getAllMenuList().then(res => {        //获取所有菜单
               this.menuAllList = res.data;  
               this.menuData = treeList(res.data)
-              this.menuLoading = false
+              this.menuLoading = false;
+              this.handleRoleSelectChange(this.roleId);
           }).catch(function(err) {
 
           })	
       },
-      // 角色选择改变监听
+      //根据角色获取菜单
       handleRoleSelectChange(roleId) {
           if(!roleId) {
               return
@@ -152,6 +153,7 @@
           //     this.$message({message: '超级管理员拥有所有菜单权限，不允许修改！', type: 'error'})
           //     return
           // }
+        
           this.authLoading = true
           let checkedNodes = this.$refs.menuTree.getCheckedNodes(false, true)
           let roleMenuIds = []       //要发送的角色授权菜单id列表  
@@ -159,19 +161,24 @@
           for(let i=0, len=checkedNodes.length; i<len; i++) {
               roleMenuIds.push(checkedNodes[i].menuId)
           }
-          
+          if(roleMenuIds.length==0){
+             this.$message({message: '请选择要授权的菜单！', type: 'error'}) 
+             this.authLoading = false; 
+             return
+          }
           // 提交授权菜单
           setMenuByRoleId({
               roleId,
               menuIds:roleMenuIds
           }).then(res=>{
                 if(res.retCode=="000000"){
-                    this.$confirm('菜单分配成功，确定刷新页面重新加载菜单吗?', '提示', {
-                        confirmButtonText: '确定',
+                    this.$confirm('菜单分配成功，是否要返回上一页?', '提示', {
+                        confirmButtonText: '返回',
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        window.location.reload()      //重新加载页面
+                        // window.location.reload()      //重新加载页面
+                        this.$router.back(-1)
                     })
                 }else{
                     this.$message({ message:'角色授权失败',type:'error',duration:3000})

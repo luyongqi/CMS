@@ -48,11 +48,11 @@
               <router-link class="inlineBlock" to="/home">
                 <el-dropdown-item>首页</el-dropdown-item>
               </router-link>
-              <div @click="logout">
-                <el-dropdown-item divided >退出</el-dropdown-item>
-              </div>
               <div @click="handleChange">
                 <el-dropdown-item divided >修改密码</el-dropdown-item>
+              </div>
+              <div @click="logout">
+                <el-dropdown-item divided >退出</el-dropdown-item>
               </div>
             </el-dropdown-menu>
           </el-dropdown>

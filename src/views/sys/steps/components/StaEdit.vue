@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-12-30 10:31:39
+ * @LastEditTime: 2021-01-21 18:21:29
 -->
 <template>
   <el-dialog
@@ -123,8 +123,8 @@
           var reg = /^(-)?(([1-9]\d{0,8}(\.\d{1,2})?)|(0\.[1-9]\d?))$/; 
           if(!reg.test(value)){
             callback(new Error('请输入小数位不超过2位的数值！'));
-          }else if(this.form.stepInputMin>value){
-              callback(new Error('最大值不能小于最小值！'));
+          }else if(Number(this.form.stepInputMin)>=Number(value)){
+              callback(new Error('最大值不能小于等于最小值！'));
           }else{
             callback();
           }

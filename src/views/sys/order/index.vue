@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-12-30 16:31:34
+ * @LastEditTime: 2021-01-23 10:12:33
 --> 
 <template>
     <div class="user-management">
@@ -65,6 +65,9 @@
                             </el-button> 
                             <el-button  size="text" :disabled="scope.row.status=='9'" @click.stop="handleDel(scope.row)">
                                 删除
+                            </el-button> 
+                            <el-button  size="text"  @click.stop="handleCopy(scope.row)">
+                                复制
                             </el-button> 
                         </template>
                     </el-table-column>
@@ -190,6 +193,11 @@ export default {
             } else {
                 this.$refs["edit"].showEdit();
             }
+        },
+        // 复制
+        handleCopy(row){
+            row.id = '' 
+            this.$refs["edit"].showEdit(row); 
         },
         // 删除
         async handleDel(row){

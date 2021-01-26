@@ -2,7 +2,7 @@
  * @Description: 添加部门
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-12-29 09:45:19
+ * @LastEditTime: 2021-01-23 10:13:16
 -->
 <template>
   <el-dialog
@@ -155,7 +155,11 @@
             if (!row) {
               this.title = "添加";
             } else {
-              this.title = "编辑";
+              if(row.id){
+                this.title = "编辑";
+              }else{
+                 this.title = "添加";
+              }
               this.form = Object.assign({}, row);
             }
             this.dialogFormVisible = true;

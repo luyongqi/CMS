@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-12-30 09:39:30
+ * @LastEditTime: 2021-01-23 17:30:46
 --> 
 <template>
     <div class="user-management">
@@ -119,7 +119,7 @@ export default {
             this.orderList.forEach( item => {
                 item.createdAt = formatDate(new Date(Number(item.createdAt)), "yyyy-MM-dd hh:mm");
                 item.updatedAt = formatDate(new Date(Number(item.updatedAt)), "yyyy-MM-dd hh:mm");
-                item.auditedAt = item.auditedAt?formatDate(new Date(Number(item.auditedAt)), "yyyy-MM-dd hh:mm"):'N/A'
+                item.auditedAt = item.auditedAt?formatDate(new Date(Number(item.auditedAt)), "yyyy-MM-dd hh:mm"):''
                 item.workUsers = item.workUsers.split(';')
             });                
             this.isLoading = false;                       //隐藏loading
