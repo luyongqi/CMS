@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-15 18:38:49
+ * @LastEditTime: 2021-01-30 11:40:49
 --> 
 <template>
     <div class="user-management">
@@ -113,14 +113,15 @@ export default {
     data(){
         return{
             listQuery: {
+                itemId:'',                                 //项目id
                 stepName:'',                               //步骤名称
-                pageSize: 10,                             // 分页（每页个数）
-                pageNo: 0,                                // 当前页
-                status: '',                              //  0：停用 1：正常
-                order: ''                                 // 默认创建时间倒序排列
+                pageSize: 10,                              // 分页（每页个数）
+                pageNo: 0,                                 // 当前页
+                status: '',                                //  0：停用 1：正常
+                order: ''                                  // 默认创建时间倒序排列
             },
-            operateType: null,                //操作
-            multipleSelection: [],            //已选择的选项
+            operateType: null,                             //操作
+            multipleSelection: [],                         //已选择的选项
             operates: [
                 {
                     label: "删除",
@@ -137,6 +138,9 @@ export default {
         
     },
     created(){
+        if(this.$route.query.id){
+            this.listQuery.itemId = this.$route.query.id
+        }
        this.fetchData();
     },
     // 过滤器
@@ -159,9 +163,9 @@ export default {
         // 新增、编辑
         handleEdit(row) {
             if (row.id) {       //有row时为编辑状态
-                this.$refs["edit"].showEdit(row);    
+                this.$refs["edit"].showEdit('edit',row);    
             } else {
-                this.$refs["edit"].showEdit();
+                this.$refs["edit"].showEdit('add',this.listQuery.itemId);
             }
         },
         // 删除步骤

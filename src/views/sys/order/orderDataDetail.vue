@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-13 17:53:23
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-23 17:31:28
+ * @LastEditTime: 2021-01-30 15:27:30
 -->
 <template>
     <div class="detail-container">
@@ -59,8 +59,7 @@
                                             list-type="picture-card"
                                             :file-list="step.filedValue"
                                             disabled
-                                            :on-preview="handlePictureCardPreview"
-                                            :on-remove="handleRemove">
+                                            >
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                     </div>
@@ -95,16 +94,22 @@
                     <el-col class="form-border form-left-bg font-small" :span="6">审核状态</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataStatus | formatStatus}}</el-col>
                 </el-row>
-                <el-row>
-                    <el-col class="form-border form-left-bg font-small" :span="6">申请时间</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.updatedAt | formatTime}}</el-col>
-                </el-row>
                
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">工单负责人</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workManagerName}}</el-col>
                 </el-row>
                
+               <el-row>
+                    <el-col class="form-border form-left-bg font-small" :span="6">工单数据审核人</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataAuditedUserName}}</el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col class="form-border form-left-bg font-small" :span="6">工单数据审批人</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataApprovedUserName}}</el-col>
+                </el-row>
+
                 <!-- <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">工作组成员</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workUserNames}}</el-col>
@@ -196,14 +201,16 @@ const defaultWorkApply = {       //工单详细信息
 export default {
     data(){
         return {
-            imgUrl,                //图片ip
-            id:null,        //服务id
+            imgUrl,                                                   //图片ip
+            cId:'',                                                   //当前单位id (图片展示时需用到)
+            id:null,                                                 //服务id
             orderReturnApply: Object.assign({},defaultWorkApply),    //工单信息
             updateStatusParam: Object.assign({}, defaultUpdateStatusParam),    //审核处理
             devList:[]        //设备列表  
         }
     },
     created(){
+        this.cId = localStorage.getItem('preFix');
         const id = this.$route.query.id
         this.id = id 
         this.fetchData(id)
@@ -237,17 +244,18 @@ export default {
         },
         //获取部门列表
         async fetchData(id){
-            const res = await getWorkDataInfo({ id })
-            if(res.retCode === '000000'){
-                this.orderReturnApply = res.data.detail
+            const res = await getWorkDataInfo({ id }) 
+            let that = this;
+            if(res.retCode === '000000'){  
+                this.orderReturnApply = res.data.detail  
                  this.devList = res.data.detail.list      //该工单所有步骤信息
-                this.devList.forEach((item)=>{
-                    item.items.forEach((step)=>{
-                        step.steps.forEach((s)=>{
-                            if(s.stepInputType==='9'){
-                                var arr = s.filedValue.split(',')
-                                s.filedValue =  arr.map(p=>{
-                                    return {url:`${imgUrl}${p}`}
+                this.devList.forEach((item)=>{ 
+                    item.items.forEach((step)=>{  
+                        step.steps.forEach((s)=>{ 
+                            if(s.stepInputType==='9'){ 
+                                var arr = s.filedValue.split(',')  
+                                s.filedValue =  arr.map(p=>{ 
+                                    return {url:`${imgUrl}/${that.cId}${p}`}  
                                 })  
                             }
                             

@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-11-26 11:54:42
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-23 17:31:39
+ * @LastEditTime: 2021-01-30 15:31:43
 -->
 <template>
     <div class="detail-container">
@@ -60,8 +60,7 @@
                                             list-type="picture-card"
                                             :file-list="step.filedValue"
                                             disabled
-                                            :on-preview="handlePictureCardPreview"
-                                            :on-remove="handleRemove">
+                                           >
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                     </div>
@@ -96,16 +95,20 @@
                     <el-col class="form-border form-left-bg font-small" :span="6">审核状态</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataStatus | formatStatus}}</el-col>
                 </el-row>
-                <el-row>
-                    <el-col class="form-border form-left-bg font-small" :span="6">申请时间</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.updatedAt | formatTime}}</el-col>
-                </el-row>
                
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">工单负责人</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workManagerName}}</el-col>
                 </el-row>
-               
+               <el-row>
+                    <el-col class="form-border form-left-bg font-small" :span="6">工单数据审核人</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataAuditedUserName}}</el-col>
+                </el-row>
+
+                <el-row>
+                    <el-col class="form-border form-left-bg font-small" :span="6">工单数据审批人</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.dataApprovedUserName}}</el-col>
+                </el-row>
                 <!-- <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">工作组成员</el-col>
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workUserNames}}</el-col>
@@ -179,6 +182,7 @@ export default {
     data(){
         return {
             imgUrl,                //图片ip
+            cId:'',                                                   //当前单位id (图片展示时需用到)
             id:null,        //服务id
             orderReturnApply: Object.assign({},defaultWorkApply),    //工单信息
             updateStatusParam: Object.assign({}, defaultUpdateStatusParam),    //审核处理
@@ -186,6 +190,7 @@ export default {
         }
     },
     created(){
+        this.cId = localStorage.getItem('preFix');
         const id = this.$route.query.id
         this.id = id 
         this.fetchData(id)
@@ -219,6 +224,7 @@ export default {
         },
         //获取部门列表
         async fetchData(id){
+            let that = this;
             const res = await getWorkDataInfo({ id })
             if(res.retCode === '000000'){
                 this.orderReturnApply = res.data.detail
@@ -229,7 +235,7 @@ export default {
                             if(s.stepInputType==='9'){
                                 var arr = s.filedValue.split(',')
                                 s.filedValue =  arr.map(p=>{
-                                    return {url:`${imgUrl}${p}`}
+                                    return {url:`${imgUrl}/${that.cId}${p}`}  
                                 })  
                             }
                             

@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-13 17:53:23
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-23 17:32:00
+ * @LastEditTime: 2021-01-30 15:17:45
 -->
 <template>
     <div class="detail-container">
@@ -58,8 +58,7 @@
                                         <el-upload
                                             action="https://jsonplaceholder.typicode.com/posts/"
                                             list-type="picture-card"
-                                            :on-preview="handlePictureCardPreview"
-                                            :on-remove="handleRemove">
+                                           >
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                     </div>
@@ -92,8 +91,16 @@
                     <el-col class="form-border font-small" :span="18">{{orderReturnApply.workName}}</el-col>
                 </el-row>
                 <el-row>
-                    <el-col class="form-border form-left-bg font-small" :span="6">申请人</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.createdUser}}</el-col>
+                    <el-col class="form-border form-left-bg font-small" :span="6">工单创建人</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.createdUserName}}</el-col>
+                </el-row>
+                <el-row>
+                    <el-col class="form-border form-left-bg font-small" :span="6">工单审核人</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.auditedUserName}}</el-col>
+                </el-row>
+                <el-row>
+                    <el-col class="form-border form-left-bg font-small" :span="6">工单审批人</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.approvedUserName}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">审核状态</el-col>
@@ -123,7 +130,7 @@
              <div class="form-container-border" v-show="orderReturnApply.status!=='0'">
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理人员</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.auditedUser}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.auditedUserName}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理时间</el-col>
@@ -138,7 +145,7 @@
             <div class="form-container-border" v-show="orderReturnApply.status>2">
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理人员</el-col>
-                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.approvedUser}}</el-col>
+                    <el-col class="form-border font-small" :span="18">{{orderReturnApply.approvedUserName}}</el-col>
                 </el-row>
                 <el-row>
                     <el-col class="form-border form-left-bg font-small" :span="6">处理时间</el-col>

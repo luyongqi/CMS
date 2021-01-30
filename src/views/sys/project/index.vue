@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-15 18:37:43
+ * @LastEditTime: 2021-01-30 11:33:37
 --> 
 <template>
     <div class="user-management">
@@ -109,10 +109,11 @@ export default {
     data(){
         return{
              listQuery: {
-                itemName:'',                               //项目名称
+                deviceId:'',                              //设备编号
+                itemName:'',                              //项目名称
                 pageSize: 10,                             // 分页（每页个数）
                 pageNo: 0,                                // 当前页
-                status: '',                              //  0：停用 1：正常
+                status: '',                               //  0：停用 1：正常
                 order: ''                                 // 默认创建时间倒序排列
             },
             operateType: null,                //操作
@@ -133,6 +134,9 @@ export default {
         
     },
     created(){
+        if(this.$route.query.id){
+            this.listQuery.deviceId = this.$route.query.id
+        }
        this.fetchData();
     },
     methods:{
@@ -149,9 +153,9 @@ export default {
         // 新增、编辑
         handleEdit(row) {
             if (row.id) {
-                this.$refs["edit"].showEdit(row);    
+                this.$refs["edit"].showEdit('edit',row);    
             } else {
-                this.$refs["edit"].showEdit();
+                this.$refs["edit"].showEdit('add',this.listQuery.deviceId);
             }
         },
         // 删除单位
@@ -198,9 +202,9 @@ export default {
                 })  
             })  
         },
-        // 跳转至设备管理
+        // 跳转至步骤管理
         navTo(row){
-            this.$router.push({path:'/sys/steps',query:{id:row.deviceId}})
+            this.$router.push({path:'/sys/steps',query:{id:row.itemId}})
         },
         //当前页码发生变化时
         handleCurrentChange(val){
