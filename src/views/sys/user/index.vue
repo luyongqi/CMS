@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-24 18:51:04
+ * @LastEditTime: 2021-01-30 17:23:26
 --> 
 <template>
     <div class="user-management">
@@ -32,12 +32,12 @@
                     <el-table-column fixed label="序号" type="index" prop="xh" width="50"  align="center"></el-table-column>
                     <el-table-column fixed label="用户编号"  prop="userId" align="center"></el-table-column>
                     <el-table-column fixed label="登录账号"  prop="loginName" align="center"></el-table-column>
+                    <el-table-column fixed label="拥有角色"  prop="roleNames"  align="center"></el-table-column>
                     <!-- <el-table-column fixed="left" label="性别"  align="center">
                         <template slot-scope="scope">
                             <div>{{scope.row.sex=='0'?'男':'女'}}</div>
                         </template>
                     </el-table-column>
-                    <el-table-column fixed label="职务"  prop="jobName"  align="center"></el-table-column>
                     <el-table-column fixed label="所在部门"  prop="deptName"  align="center"></el-table-column>
                     <el-table-column fixed label="所在分组"  prop="groupName"  align="center"></el-table-column> -->
                     <el-table-column fixed label="创建时间"  align="center">
@@ -286,7 +286,11 @@ export default {
             this.isLoading = true;                          //显示Loading
             const res = await getUserList(this.listQuery)
             this.totalNum = res.data.totalNum;             //总条数
-            this.staffList =  res.data.list;               //员工列表                   
+            let list = res.data.list;
+            list.forEach( item => {
+                item.roleNames = item.roleNames.split(';').join('、')
+            })
+            this.staffList =  list;               //员工列表     
             this.isLoading = false;                        //隐藏loading
         }, 
 

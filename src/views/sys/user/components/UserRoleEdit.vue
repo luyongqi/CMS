@@ -2,7 +2,7 @@
  * @Description: 
  * @Date: 2020-08-05 10:50:07
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-09-24 18:55:28
+ * @LastEditTime: 2021-01-30 18:05:00
 -->
 <template>
    <el-dialog
@@ -54,9 +54,9 @@
     },
     methods: {
         showEdit(row) {
-            this.form.userId = row.userId;
-            this.form.roleIds = row.roleIds;
-            this.allocDialogVisible = true;
+          this.form.userId = row.userId;
+          this.form.roleIds = row.roleIds; 
+          this.allocDialogVisible = true;
         },
         //  获取角色列表
         getAllRoleList() {

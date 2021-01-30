@@ -5,7 +5,7 @@
 
     <el-row :gutter="20" class="nav">
       <!-- 导航列表 -->
-      <el-col :xs="18" :sm="18" :md="18" :lg="21" :xl="21">
+      <el-col :span="10">
         <div class="nav-top-list" v-if="navBarList[0]">
           <!-- 导航组件 -->
           <el-menu
@@ -29,25 +29,29 @@
       </el-col>
 
       <!-- 头像 -->
-      <el-col class="right" :xs="6" :sm="6" :md="6" :lg="3" :xl="3">
-        <el-badge class="msg">
-          <i class="iconfont iconyouxiang"></i>
-        </el-badge>
-        <el-badge  class="inform">
-          <i class="iconfont iconxiaoxi"></i>
-        </el-badge>
+      <el-col class="right" :span="14">
+        <!-- 角色 -->
+        <span class="inform">
+          {{ userInfo.roleNames }}
+        </span>
+        <!-- 头像 -->
+        <el-avatar class="avtarImg" :src="avatarImg"></el-avatar>
+
         <div class="user-avtar">
           <el-dropdown class="avatar-container" trigger="click">
             <!--头像  -->
-            <span class="el-dropdown-link">
-              <el-avatar class="avtarImg" :src="avatarImg"></el-avatar>
+            <span class="el-dropdown-link" style="color：#fff">
+              {{ userInfo.userName }}
               <i class="el-icon-caret-bottom"></i>
             </span>
             <!-- 下拉框 -->
             <el-dropdown-menu class="user-dropdown" slot="dropdown">
-              <router-link class="inlineBlock" to="/home">
-                <el-dropdown-item>首页</el-dropdown-item>
-              </router-link>
+              <div @click="navTo('/home')">
+                <el-dropdown-item  >首页</el-dropdown-item>
+              </div>
+              <!-- <div @click="navTo('/home')">
+                <el-dropdown-item divided >个人中心</el-dropdown-item>
+              </div> -->
               <div @click="handleChange">
                 <el-dropdown-item divided >修改密码</el-dropdown-item>
               </div>
@@ -77,7 +81,8 @@ export default {
   computed: {
     ...mapState({
       navTree: state => state.menu.treeMenuList,
-      navBarList:state => state.menu.navBarList       //导航栏数组
+      navBarList:state => state.menu.navBarList,       //导航栏数组
+      userInfo:state => state.user.userInfo            //用户信息
     })
   },
 
@@ -88,7 +93,9 @@ export default {
   
   methods: {
     ...mapMutations(['SET_SIDE_LIST']),
-
+    navTo(path){
+      this.$router.push({ path })
+    },
     // 根据父级id查找侧边栏点击导航 选择顶部导航时重定向到第一项
     selectFn(menuId) {
 
@@ -141,6 +148,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
 .el-menu-demo {
   width: 100%;
   background-color: transparent;
@@ -192,41 +200,34 @@ export default {
       display: flex;
       align-items: center;
       justify-content: flex-end;
-      // 消息
-      .msg {
-        cursor: pointer;
-        margin-right: 40px;
-        .iconyouxiang {
-          color: rgb(191, 203, 217);
-          font-size: 18px;
-        }
+      position: relative;
+    
+      .avtarImg {
+        display: inline-block;
+        line-height: 60px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 60px;
       }
-      // 通知
+      // 角色
       .inform {
-        cursor: pointer;
-        margin-right: 90px;
-        .iconxiaoxi {
-          color: rgb(191, 203, 217);
-          font-size: 20px;
-        }
+        color: #fff;
+        margin-right: 40px;
       }
       //用户头像的操作
       .user-avtar {
+        
         .avatar-container {
           height: 60px;
           line-height: 60px;
+          color: #fff;
           /deep/ .el-dropdown-link {
             cursor: pointer;
-            height: 60px;
+            
+            padding: 20px;
+            padding-right: 0;
             position: relative;
-            .avtarImg {
-              display: inline-block;
-              line-height: 60px;
-              position: absolute;
-              top: 50%;
-              transform: translateY(-50%);
-              right: 20px;
-            }
             .el-icon-caret-bottom {
               display: inline-block;
               height: 60px;

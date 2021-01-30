@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-13 16:24:29
  * @LastEditors: luyongqi
- * @LastEditTime: 2021-01-30 11:07:12
+ * @LastEditTime: 2021-01-30 16:56:52
 --> 
 <template>
     <div class="user-management">
@@ -109,6 +109,7 @@ export default {
     data(){
         return{
             listQuery: {
+                deptId:'',                                 //部门编号
                 deviceName:'',                               //设备名称
                 pageSize: 10,                             // 分页（每页个数）
                 pageNo: 0,                                // 当前页
@@ -133,6 +134,9 @@ export default {
         
     },
     created(){
+        if(this.$route.query.id){
+            this.listQuery.deptId = this.$route.query.id
+        }
        this.fetchData();
     },
     methods:{
@@ -149,9 +153,9 @@ export default {
         // 新增、编辑
         handleEdit(row) {
             if (row.id) {
-                this.$refs["edit"].showEdit(row);    
+                this.$refs["edit"].showEdit('edit',row);    
             } else {
-                this.$refs["edit"].showEdit();
+                this.$refs["edit"].showEdit('add',this.listQuery.deptId);
             }
         },
         // 删除单位

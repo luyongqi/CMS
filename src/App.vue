@@ -2,7 +2,7 @@
  * @Author: 卢勇其
  * @Date: 2020-07-07 11:55:16
  * @LastEditors: luyongqi
- * @LastEditTime: 2020-11-26 10:38:17
+ * @LastEditTime: 2021-01-30 17:32:22
 --> 
 <template>
   <div id="app">
@@ -31,6 +31,6 @@
     color: #2c3e50;
     min-height:100%;
     min-width:100%;
-
   }
+  
 </style>
